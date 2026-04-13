@@ -729,12 +729,12 @@ function PageTeam() {
   const ROLES = [
     {
       abbr:"UX", role:"Product Designer Pleno",
-      type:"Part-time → 20h/sem", range:"M1–M4 · M5–M8",
+      type:"Part-time → 40h/mês", range:"M1–M4 · M5–M8",
       color:"#0E7490", colorL:"#ECFEFF",
       hours:"700h (com margem)",
       bars:[
         { ms:[1,4],  label:"Part time", lite:false, opacity:0.72 },
-        { ms:[5,8],  label:"20h/sem",   lite:true,  opacity:0.55 },
+        { ms:[5,8],  label:"40h/mês",   lite:true,  opacity:0.55 },
       ],
       skills:["Figma","Design System","Prototipação","UX Research","Handoff"],
       resp:["Prototipação completa App Menfe e Collegiate (M1–M4)","Design System e componentes","Handoff para desenvolvimento (M3–M4)","Suporte de UI durante desenvolvimento (M5–M8)","Validação com stakeholders"],
