@@ -57,32 +57,45 @@ function Badge({ a, bg, color, size = 28 }) {
 
 // ─── Sidebar Nav ─────────────────────────────────────────────────────────────
 const NAV = [
-  { section: "FASE 1 — MVP", items: [
-    { key: "overview",     label: "Visão Geral" },
-    { key: "architecture", label: "Arquitetura" },
-    { key: "roadmap",      label: "Roadmap" },
-    { key: "team",         label: "Equipe" },
+  { section: "VISÃO GERAL", items: [
+    { key: "overview", label: "Visão Geral do Projeto" },
   ]},
-  { section: "FASE 1 — PROTÓTIPO", items: [
-    { key: "proto_menfe",      label: "App Investidor · F1" },
-    { key: "proto_backoffice", label: "Backoffice Admin · F1" },
+  { section: "FASE 1 — M1 a M4", items: [
+    { key: "f1_arch",          label: "Arquitetura" },
+    { key: "f1_roadmap",       label: "Roadmap" },
+    { key: "f1_team",          label: "Equipe" },
+    { key: "proto_menfe",      label: "Protótipo Menfe" },
+    { key: "proto_backoffice", label: "Backoffice" },
   ]},
-  { section: "PRÓXIMAS FASES", items: [
-    { key: "proto_collegiate", label: "App Inquilino · F2" },
-    { key: "proto_leads",      label: "App Leads · F3" },
+  { section: "FASE 2 — M5 a M8", items: [
+    { key: "f2_arch",          label: "Arquitetura" },
+    { key: "f2_roadmap",       label: "Roadmap" },
+    { key: "f2_team",          label: "Equipe" },
+    { key: "proto_collegiate", label: "Protótipo" },
+  ]},
+  { section: "FASE 3 — M9 a M12", items: [
+    { key: "f3_arch",          label: "Arquitetura" },
+    { key: "f3_roadmap",       label: "Roadmap" },
+    { key: "f3_team",          label: "Equipe" },
+    { key: "proto_leads",      label: "Protótipo" },
   ]},
 ];
 
 const PAGE_LABELS = {
-  overview:          "Visão Geral",
-  architecture:      "Arquitetura",
-  roadmap:           "Roadmap",
-  team:              "Equipe",
-  proto_menfe:       "Protótipo · App do Investidor",
-  proto_backoffice:  "Protótipo · Backoffice Administrativo",
-  proto_collegiate:  "Protótipo · App do Inquilino · Logado",
-  proto_leads:       "Protótipo · App de Leads · Deslogado",
-  pricing:           "Modularização de Escopo",
+  overview:          "Visão Geral do Projeto",
+  f1_arch:           "Fase 1 · Arquitetura",
+  f1_roadmap:        "Fase 1 · Roadmap",
+  f1_team:           "Fase 1 · Equipe",
+  proto_menfe:       "Fase 1 · Protótipo App do Investidor",
+  proto_backoffice:  "Fase 1 · Protótipo Backoffice",
+  f2_arch:           "Fase 2 · Arquitetura",
+  f2_roadmap:        "Fase 2 · Roadmap",
+  f2_team:           "Fase 2 · Equipe",
+  proto_collegiate:  "Fase 2 · Protótipo App do Inquilino",
+  f3_arch:           "Fase 3 · Arquitetura",
+  f3_roadmap:        "Fase 3 · Roadmap",
+  f3_team:           "Fase 3 · Equipe",
+  proto_leads:       "Fase 3 · Protótipo App de Leads",
 };
 
 function Sidebar({ active, setActive }) {
@@ -90,7 +103,7 @@ function Sidebar({ active, setActive }) {
     <aside style={{
       width: 210, minWidth: 210, backgroundColor: C.navy,
       borderRight: `0.5px solid rgba(255,255,255,0.06)`,
-      display: "flex", flexDirection: "column", overflow: "hidden",
+      display: "flex", flexDirection: "column", overflowY: "auto",
     }}>
       {/* Logo */}
       <div style={{
@@ -127,7 +140,7 @@ function Sidebar({ active, setActive }) {
               <span style={{
                 width: 6, height: 6, borderRadius: "50%", flexShrink: 0, display: "inline-block",
                 backgroundColor: active === key
-                  ? (key.startsWith("proto_menfe") ? C.gold : key.startsWith("proto_collegiate") ? C.coll : key.startsWith("proto_backoffice") ? "#7C3AED" : key.startsWith("proto_leads") ? C.coll : C.blueM)
+                  ? (key.startsWith("proto_menfe") || key.startsWith("f1") ? C.gold : key.startsWith("proto_collegiate") || key.startsWith("f2") ? C.coll : key.startsWith("proto_backoffice") ? "#7C3AED" : key.startsWith("proto_leads") || key.startsWith("f3") ? "#2D7D46" : C.blueM)
                   : "rgba(255,255,255,0.15)",
               }} />
               {lbl_}
@@ -149,7 +162,7 @@ function Sidebar({ active, setActive }) {
           }}>M</div>
           <div>
             <div style={{ fontSize: 11.5, fontWeight: 600, color: C.white }}>menfe</div>
-            <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.35)" }}>Produto Digital · v10</div>
+            <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.35)" }}>Produto Digital · v11</div>
           </div>
         </div>
       </div>
@@ -172,234 +185,278 @@ function Topbar({ active }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PAGE: OVERVIEW
+// PAGE: OVERVIEW — Visão Geral do Projeto
+// ═══════════════════════════════════════════════════════════════════════════════
 function PageOverview() {
-  const metrics = [
-    { label: "Fases de Produto", value: "3", sub: "F1 App Investidor · F2 Inquilino · F3 Leads", accent: C.blue },
-    { label: "Horas Estimadas", value: "6.962h", sub: "Com margem de segurança de 25%", accent: C.gold },
-    { label: "Duração", value: "~15 m", sub: "15–16 meses para entrega completa", accent: C.coll },
-  ];
+  const [activePhase, setActivePhase] = useState(null);
 
-  const systems = [
+  const PHASES = [
     {
-      abbr: "F1", name: "App do Investidor · Fase 1 · MVP", bg: C.navyL,
-      tags: ["React Native", "iOS & Android", "820h → 1.025h"],
-      feats: [
-        "Login e autenticação segura (CPF/e-mail + senha, biometria)",
-        "Dashboard financeiro: patrimônio, dividendos, aportes",
-        "Evolução da obra em tempo real por empreendimento",
-        "Hall de novos empreendimentos com 'Quero Investir'",
-        "Redirecionamento para WhatsApp ou canal externo",
-        "Download de contratos em PDF",
-        "Chat direto com a equipe Menfe",
-        "Notificações push sobre aportes e atualizações",
-        "Log de atividades do investidor",
-        "Perfil e configurações de conta",
+      id: "F1", label: "Fase 1", range: "M1 – M4", color: "#1A2445", colorL: "#EEF0FC",
+      title: "MVP · App do Investidor + Backoffice",
+      icon: "📱",
+      objetivo: "Lançar o produto central da Menfe: o app que permite ao investidor acompanhar seu portfólio, contratos, evolução de obras e aportes — com o backoffice administrativo para gestão interna.",
+      publico: "Investidores da Menfe e equipe administrativa interna.",
+      entregaveis: [
+        "App Menfe (React Native · iOS & Android)",
+        "Backoffice Admin (NextJS · Web)",
+        "Backend NestJS + PostgreSQL (módulos de F1)",
       ],
+      funcionalidades: [
+        "Autenticação segura (CPF/e-mail + senha)",
+        "Dashboard: patrimônio, dividendos e aportes",
+        "Portfólio de empreendimentos investidos",
+        "Evolução de obra em tempo real",
+        "Download de contratos PDF",
+        "Hall de lançamentos com 'Quero Investir'",
+        "Chat com a equipe Menfe",
+        "Notificações push e log de atividades",
+        "Backoffice: gestão de obras, contratos e financeiro",
+      ],
+      team: "3 devs full-time (160h/mês) + 1 designer part-time (80h/mês, M1–M2) + 1 GP (40h/mês)",
+      estrategia: "Entregar o core da plataforma com o menor escopo viável para validar o produto com investidores reais. O backoffice é desenvolvido em paralelo para que a equipe Menfe possa operar desde o dia 1 sem dependências externas.",
     },
     {
-      abbr: "BO", name: "Backoffice Admin · Fase 1 · Incluído no MVP", bg: "#7C3AED",
-      tags: ["NextJS", "Web Admin", "1.140h → 1.425h"],
-      feats: [
-        "Gerenciamento de usuários investidores (CRUD)",
-        "Gestão de empreendimentos e unidades",
-        "Controle de evolução de obra e relatórios",
-        "Gestão financeira — aportes, dividendos e contratos",
-        "Painel de leads e redirecionamentos de interesse",
-        "Logs de acesso e auditoria de ações",
-        "Gestão de permissões e papéis (RBAC)",
-        "Comunicados e notificações push via painel",
+      id: "F2", label: "Fase 2", range: "M5 – M8", color: "#C44A18", colorL: "#FEF0EB",
+      title: "App do Inquilino · Área Logada",
+      icon: "🏠",
+      objetivo: "Expandir a plataforma para o segundo perfil de usuário: o hóspede do Collegiate. Criar a experiência digital de quem ocupa o imóvel — financeiro, serviços, reservas e comunicação com a gestão.",
+      publico: "Hóspedes ativos dos empreendimentos Collegiate.",
+      entregaveis: [
+        "App Collegiate — área logada (React Native · iOS & Android)",
+        "Expansão App Menfe F2 (mapas, investimentos, carrinho, chat)",
+        "Backoffice F2 (gestão de hóspedes, quartos, serviços e reservas)",
+        "Backend F2 (booking, carrinho, financeiro de hóspedes)",
       ],
+      funcionalidades: [
+        "Login e perfil do hóspede",
+        "Financeiro: aluguel, histórico e segunda via de boleto/Pix",
+        "Lista de quartos e serviços do empreendimento",
+        "Carrinho e gestão de reservas",
+        "Avisos, notificações do condomínio",
+        "Expansão do App Menfe: mapas, gestão de investimentos e chat",
+        "Backoffice: hóspedes, quartos, serviços e reservas",
+      ],
+      team: "3 devs full-time (160h/mês) + 1 designer part-time (80h/mês) + 1 GP (40h/mês)",
+      estrategia: "Com o MVP validado na F1, a F2 expande o ecossistema para o lado do hóspede. O sistema de booking e financeiro é a base técnica que sustenta a monetização recorrente do Collegiate — pavimentando a visão de plataforma de moradia flexível. O designer trabalha em paralelo com o desenvolvimento, garantindo continuidade visual.",
     },
     {
-      abbr: "F2", name: "App do Inquilino · Fase 2", bg: C.collD,
-      tags: ["React Native", "iOS & Android", "840h → 1.050h"],
-      feats: [
-        "Área logada exclusiva para inquilinos do Collegiate",
-        "Painel financeiro: aluguel, histórico e segunda via",
-        "Manual digital do imóvel e guia de uso",
-        "Informações do prédio: regras, portaria e serviços",
-        "Avisos e comunicados do condomínio",
-        "Chamados de manutenção e suporte",
-        "Notificações de vencimento e eventos do prédio",
+      id: "F3", label: "Fase 3", range: "M9 – M12", color: "#2D7D46", colorL: "#E8F5EE",
+      title: "App Collegiate F3 · Gestão Avançada",
+      icon: "🔑",
+      objetivo: "Completar a experiência do hóspede com funcionalidades avançadas de gestão do dia a dia: reserva de áreas comuns, controle de acesso por chave digital, agendamento de serviços e mapas do empreendimento. Esta fase consolida o Collegiate como uma plataforma de moradia — próxima ao modelo Airbnb/Quinto Andar.",
+      publico: "Hóspedes ativos e equipe de gestão do Collegiate.",
+      entregaveis: [
+        "App Collegiate F3 — funcionalidades avançadas",
+        "Backoffice F3 (gestão de áreas comuns)",
+        "Backend F3 (quartos, reservas de áreas, acessos)",
       ],
-    },
-    {
-      abbr: "F3", name: "App de Leads · Fase 3 · Área Deslogada", bg: "#2D7D46",
-      tags: ["React Native", "iOS & Android", "Busca + Booking"],
-      feats: [
-        "Vitrine pública de empreendimentos Collegiate",
-        "Busca com filtros: cidade, tipo, faixa de preço",
-        "Detalhe de empreendimento com fotos, amenidades e mapa",
-        "Assistente de busca inteligente (5 perguntas)",
-        "Funcionalidade de booking e reserva de unidades",
-        "Fluxo de cadastro e conversão de lead em inquilino",
-        "Integração com CRM e equipe comercial",
+      funcionalidades: [
+        "Chat integrado no app",
+        "Gestão de quartos (M9–M10)",
+        "Reserva de áreas comuns e serviços",
+        "Mapas do empreendimento",
+        "Chave de acesso digital",
+        "Agendamento de serviços",
+        "Gestão de áreas comuns no Backoffice",
       ],
-    },
-    {
-      abbr: "API", name: "Backend Unificado · NestJS + PostgreSQL", bg: "#2D7D46",
-      tags: ["NestJS", "PostgreSQL", "1.370h → 1.712h"],
-      feats: [
-        "Autenticação JWT + RBAC (3 perfis: investidor, inquilino, admin)",
-        "Sistema de venda de empreendimentos",
-        "Sistema de booking completo (F3)",
-        "Gestão financeira investidor e inquilino",
-        "Integração bancária (Pix, Boleto)",
-        "Gestão de patrimônio e evolução de obra",
-        "Sistema de Chat (investidor ↔ Menfe)",
-        "CRUD empreendimentos, quartos, usuários",
-        "Contratos, logs e auditoria",
-        "Notificações push (FCM)",
-      ],
+      team: "2 devs full-time (160h/mês · BE encerra M10) + 1 designer part-time (80h/mês) + 1 GP (40h/mês)",
+      estrategia: "A F3 fecha o ciclo da experiência do hóspede, tornando o app o centro de controle da estadia no Collegiate. O foco em acesso digital e agendamento reduz a operação manual da gestão e posiciona o Collegiate como uma plataforma de moradia flexível e premium — com infraestrutura tecnológica para escalar no modelo de marketplace habitacional.",
     },
   ];
 
-  const profiles = [
-    { abbr: "INV", name: "Investidor", desc: "App Menfe F1 · Portfólio, obras, financeiro e lançamentos", bg: C.blueL, color: C.blue },
-    { abbr: "INQ", name: "Inquilino", desc: "App Collegiate F2 · Financeiro, manual do imóvel e infos do prédio", bg: C.collL, color: C.collD },
-    { abbr: "LED", name: "Lead / Prospect", desc: "App Público F3 · Busca, detalhe de empreendimento e booking", bg: C.greenL, color: C.green },
-    { abbr: "ADM", name: "Admin/Backoffice", desc: "Web · Gestão de usuários, empreendimentos, obras e dados", bg: C.gray100, color: C.gray600 },
+  const METRICS = [
+    { label: "Fases", value: "3", sub: "F1 Investidor · F2 Inquilino · F3 Avançado", color: C.blue },
+    { label: "Duração total", value: "12 m", sub: "M1 a M12 · 4 meses por fase", color: C.gold },
+    { label: "Apps entregues", value: "3", sub: "App Menfe · App Collegiate · Backoffice", color: C.coll },
+    { label: "Perfis de usuário", value: "3", sub: "Investidor · Inquilino · Admin", color: "#2D7D46" },
   ];
 
-  const estimativas = [
-    { app: "Backend",           h: "1.370h", hm: "1.712h", color: "#2D7D46" },
-    { app: "App Investidor F1", h: "820h",   hm: "1.025h", color: C.navyL },
-    { app: "Backoffice F1",     h: "1.140h", hm: "1.425h", color: "#7C3AED" },
-    { app: "App Inquilino F2",  h: "480h",   hm: "600h",   color: C.collD },
-    { app: "App Leads F3",      h: "760h",   hm: "950h",   color: "#2D7D46" },
+  const SISTEMAS = [
+    { abbr:"API", nome:"Backend · NestJS + PostgreSQL", color:"#2D7D46", fases:"F1→F3", desc:"Serve todos os apps. Auth JWT + RBAC, financeiro, booking, chat, push e integrações bancárias." },
+    { abbr:"F1",  nome:"App Menfe · React Native",       color:"#1A2445", fases:"F1→F2", desc:"App do investidor. Portfólio, obras, financeiro, contratos, lançamentos e chat." },
+    { abbr:"BO",  nome:"Backoffice · NextJS Web",        color:"#7C3AED", fases:"F1→F3", desc:"Painel de gestão interna. Empreendimentos, obras, contratos, hóspedes e áreas comuns." },
+    { abbr:"CO",  nome:"App Collegiate · React Native",  color:"#C44A18", fases:"F2→F3", desc:"App do hóspede. Financeiro, reservas, serviços, chat, acesso digital e mapas — com visão de plataforma de moradia flexível." },
   ];
 
   return (
-    <div style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", gap: 20, alignItems: "flex-start", backgroundColor: C.offwhite }}>
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ flex:1, overflowY:"auto", backgroundColor:C.offwhite }}>
 
-        {/* Intro banner */}
-        <div style={{
-          borderRadius: 14, overflow: "hidden",
-          background: `linear-gradient(135deg, ${C.navy} 0%, ${C.navyL} 100%)`,
-          padding: "22px 26px", display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Documentação de Produto</div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: C.white, lineHeight: 1.2, marginBottom: 6 }}>
-              Menfe <span style={{ color: C.gold }}>·</span> Collegiate
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", maxWidth: 480, lineHeight: 1.6 }}>
-              Plataforma digital em 3 fases: F1 app do investidor com portfólio, obras e lançamentos + backoffice; F2 área logada do inquilino com financeiro, manual e infos do prédio; F3 vitrine pública com busca e booking para leads.
+      {/* Hero banner */}
+      <div style={{
+        background:`linear-gradient(135deg, ${C.navy} 0%, #0E1F3D 60%, #162A4A 100%)`,
+        padding:"36px 40px 32px", position:"relative", overflow:"hidden",
+      }}>
+        <div style={{ position:"absolute", top:-60, right:-60, width:300, height:300, borderRadius:"50%", background:"rgba(30,78,156,0.15)", pointerEvents:"none" }}/>
+        <div style={{ position:"absolute", bottom:-40, left:200, width:200, height:200, borderRadius:"50%", background:`rgba(201,168,76,0.08)`, pointerEvents:"none" }}/>
+        <div style={{ position:"relative" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:16 }}>
+            <div style={{ width:44, height:44, borderRadius:13, background:`linear-gradient(135deg,${C.blue},${C.blueM})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:900, color:"#fff" }}>M</div>
+            <div style={{ width:44, height:44, borderRadius:13, background:`rgba(201,168,76,0.2)`, border:`1px solid rgba(201,168,76,0.4)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:900, color:C.gold }}>C</div>
+            <div style={{ width:1, height:32, backgroundColor:"rgba(255,255,255,0.12)", margin:"0 4px" }}/>
+            <div>
+              <div style={{ fontSize:11, color:"rgba(255,255,255,0.4)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.1em" }}>Documentação de Produto</div>
+              <div style={{ fontSize:13, color:"rgba(255,255,255,0.6)", fontWeight:500 }}>Menfe · Collegiate · Plataforma Digital</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, fontWeight: 800, color: C.white }}>M</div>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: `rgba(201,168,76,0.2)`, border: `1px solid rgba(201,168,76,0.4)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, fontWeight: 800, color: C.gold }}>C</div>
+          <div style={{ fontSize:28, fontWeight:800, color:"#fff", lineHeight:1.2, marginBottom:10, letterSpacing:"-0.5px", maxWidth:640 }}>
+            Plataforma completa para<br/><span style={{ color:C.gold }}>investidores e hóspedes</span> do Collegiate
           </div>
-        </div>
-
-        {/* Metrics */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
-          {metrics.map(m => (
-            <div key={m.label} style={{ ...card(), padding: "16px 20px", borderTop: `3px solid ${m.accent}` }}>
-              <div style={lbl}>{m.label}</div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: C.gray800, lineHeight: 1, marginBottom: 4 }}>{m.value}</div>
-              <div style={{ fontSize: 11, color: C.gray400 }}>{m.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Systems */}
-        <div>
-          <ST>Ecossistema de apps e serviços</ST>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {systems.map(s => (
-              <div key={s.abbr} style={card({ overflow: "hidden" })}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 20px 12px", borderBottom: `0.5px solid ${C.border}` }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 9, background: s.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff", flexShrink: 0 }}>{s.abbr}</div>
-                  <div>
-                    <div style={{ fontSize: 13.5, fontWeight: 700, color: C.gray800 }}>{s.name}</div>
-                    <div style={{ display: "flex", gap: 5, marginTop: 3, flexWrap: "wrap" }}>
-                      {s.tags.map(t => <span key={t} style={pill(C.gray100, C.gray600)}>{t}</span>)}
-                    </div>
-                  </div>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 20px 14px", gap: "4px 28px" }}>
-                  {s.feats.map(f => (
-                    <div key={f} style={{ fontSize: 12, color: "#555", padding: "3px 0", display: "flex", gap: 7, alignItems: "flex-start" }}>
-                      <span style={{ width: 4, height: 4, borderRadius: "50%", background: s.bg, flexShrink: 0, marginTop: 5 }} />{f}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div style={{ fontSize:13.5, color:"rgba(255,255,255,0.55)", lineHeight:1.8, maxWidth:600 }}>
+            Ecossistema digital em 3 fases que conecta a equipe Menfe, seus investidores e os hóspedes do Collegiate numa experiência unificada — do portfólio de obras ao acesso digital do imóvel.
           </div>
         </div>
       </div>
 
-      {/* Sidebar right */}
-      <div style={{ width: 230, minWidth: 230, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ ...card(), padding: 16 }}>
-          <ST>Perfis de usuário</ST>
-          {profiles.map((p, i) => (
-            <div key={p.abbr} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "9px 0", borderBottom: i < profiles.length - 1 ? `0.5px solid ${C.border}` : "none" }}>
-              <Badge a={p.abbr} bg={p.bg} color={p.color} />
-              <div>
-                <div style={{ fontSize: 12.5, fontWeight: 700, color: C.gray800, marginBottom: 2 }}>{p.name}</div>
-                <div style={{ fontSize: 11, color: C.gray400, lineHeight: 1.4 }}>{p.desc}</div>
-              </div>
+      <div style={{ padding:"28px 40px 48px", display:"flex", flexDirection:"column", gap:28 }}>
+
+        {/* Metrics strip */}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+          {METRICS.map(m => (
+            <div key={m.label} style={{ ...card({ borderTop:`3px solid ${m.color}` }), padding:"16px 20px" }}>
+              <div style={lbl}>{m.label}</div>
+              <div style={{ fontSize:30, fontWeight:800, color:C.gray800, lineHeight:1, marginBottom:4 }}>{m.value}</div>
+              <div style={{ fontSize:11, color:C.gray400, lineHeight:1.5 }}>{m.sub}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ ...card(), padding: 16 }}>
-          <ST>Estimativas de horas</ST>
-          {estimativas.map((e, i) => (
-            <div key={e.app} style={{ padding: "8px 0", borderBottom: i < estimativas.length - 1 ? `0.5px solid ${C.border}` : "none" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: e.color, flexShrink: 0 }} />
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: C.gray800 }}>{e.app}</div>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: 15 }}>
-                <div style={{ fontSize: 10.5, color: C.gray400 }}>Base: <span style={{ fontWeight: 600, color: C.gray600 }}>{e.h}</span></div>
-                <div style={{ fontSize: 10.5, color: C.gray400 }}>+25%: <span style={{ fontWeight: 700, color: C.gray800 }}>{e.hm}</span></div>
+        {/* O Projeto */}
+        <div style={{ ...card(), padding:"24px 28px" }}>
+          <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:14 }}>O Projeto</div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:24 }}>
+            <div>
+              <div style={{ fontSize:15, fontWeight:700, color:C.gray800, marginBottom:10 }}>Contexto e Visão</div>
+              <div style={{ fontSize:13, color:C.gray600, lineHeight:1.9 }}>
+                A <strong style={{ color:C.gray800 }}>Menfe</strong> é uma gestora de investimentos imobiliários focada em empreendimentos do segmento <strong style={{ color:C.gray800 }}>Collegiate</strong> — residências premium com serviços, locação por temporada e experiência de moradia de alto padrão. No futuro, o Collegiate se posiciona como uma plataforma de hospedagem e moradia flexível, com DNA próximo ao Airbnb e ao Quinto Andar. A plataforma digital cobre dois mundos: o do <strong style={{ color:C.navyL }}>investidor</strong>, que aporta capital e acompanha rentabilidade e evolução de obra, e o do <strong style={{ color:C.collD }}>hóspede</strong>, que ocupa o empreendimento e precisa de uma experiência digital de alto padrão no seu dia a dia.
               </div>
             </div>
-          ))}
-          <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 8, backgroundColor: C.navy }}>
-            <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.45)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4 }}>Total geral com margem</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: C.white, letterSpacing: "-0.5px" }}>6.962h</div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>5.570h base + 1.392h margem</div>
+            <div>
+              <div style={{ fontSize:15, fontWeight:700, color:C.gray800, marginBottom:10 }}>Estratégia de Produto</div>
+              <div style={{ fontSize:13, color:C.gray600, lineHeight:1.9 }}>
+                O desenvolvimento é faseado para <strong style={{ color:C.gray800 }}>entregar valor desde o primeiro mês</strong> e validar com usuários reais antes de ampliar o escopo. A <strong style={{ color:"#1A2445" }}>Fase 1</strong> foca no investidor — o cliente central da Menfe. A <strong style={{ color:"#C44A18" }}>Fase 2</strong> expande para o hóspede com o core da experiência de ocupação. A <strong style={{ color:"#2D7D46" }}>Fase 3</strong> completa a jornada com funcionalidades avançadas de gestão e acesso ao imóvel.
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style={{ ...card(), padding: 16 }}>
-          <ST>Protótipo F1 · Status</ST>
-          {[
-            { f: "Login / Auth Investidor",         ok: true },
-            { f: "Home & Patrimônio",                ok: true },
-            { f: "Portfólio de Imóveis",             ok: true },
-            { f: "Evolução de Obra em tempo real",   ok: true },
-            { f: "Gestão Financeira & Dividendos",   ok: true },
-            { f: "Hall de Lançamentos",              ok: true },
-            { f: "Botão 'Quero Investir' → WhatsApp",ok: true },
-            { f: "Contratos (download PDF)",         ok: true },
-            { f: "Notificações push",                ok: true },
-            { f: "Log de Atividades",                ok: true },
-            { f: "Chat com equipe Menfe",            ok: true },
-            { f: "Perfil do Investidor",             ok: true },
-            { f: "Backoffice · Gestão de usuários",  ok: false },
-            { f: "Backoffice · Gestão de obras",     ok: false },
-            { f: "Backoffice · Painel financeiro",   ok: false },
-            { f: "App Inquilino F2",                 ok: false },
-            { f: "App Leads F3 · Vitrine pública",   ok: false },
-            { f: "App Leads F3 · Booking",           ok: false },
-          ].map(item => (
-            <div key={item.f} style={{ display: "flex", alignItems: "center", gap: 7, padding: "4px 0" }}>
-              <div style={{ width: 14, height: 14, borderRadius: 4, flexShrink: 0, backgroundColor: item.ok ? "#D1FAE5" : "#F3F4F6", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 8, color: item.ok ? "#059669" : "#9CA3AF" }}>{item.ok ? "✓" : "○"}</span>
+        {/* Sistemas */}
+        <div>
+          <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:14 }}>Ecossistema de Sistemas</div>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+            {SISTEMAS.map(s => (
+              <div key={s.abbr} style={{ ...card({ borderTop:`3px solid ${s.color}` }), padding:"16px 18px" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:10 }}>
+                  <div style={{ width:34, height:34, borderRadius:9, backgroundColor:s.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, color:"#fff", flexShrink:0 }}>{s.abbr}</div>
+                  <div>
+                    <div style={{ fontSize:12.5, fontWeight:700, color:C.gray800, lineHeight:1.3 }}>{s.nome}</div>
+                    <div style={{ fontSize:10, color:s.color, fontWeight:600, marginTop:2 }}>{s.fases}</div>
+                  </div>
+                </div>
+                <div style={{ fontSize:11.5, color:C.gray600, lineHeight:1.65 }}>{s.desc}</div>
               </div>
-              <span style={{ fontSize: 11, color: item.ok ? C.gray800 : C.gray400, fontWeight: item.ok ? 500 : 400 }}>{item.f}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {/* Phase cards */}
+        <div>
+          <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:14 }}>Estratégia por Fase</div>
+          <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+            {PHASES.map(ph => {
+              const isOpen = activePhase === ph.id;
+              return (
+                <div key={ph.id} style={{ ...card({ border:`1px solid ${isOpen ? ph.color : C.border}`, boxShadow: isOpen ? `0 0 0 3px ${ph.color}18` : undefined }), overflow:"hidden", transition:"all 0.2s" }}>
+                  {/* Header */}
+                  <div onClick={() => setActivePhase(isOpen ? null : ph.id)} style={{ padding:"18px 24px", cursor:"pointer", display:"flex", alignItems:"center", gap:16, borderTop:`3px solid ${ph.color}` }}>
+                    <div style={{ width:42, height:42, borderRadius:12, backgroundColor:ph.colorL, display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, flexShrink:0 }}>{ph.icon}</div>
+                    <div style={{ flex:1 }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:3 }}>
+                        <span style={{ fontSize:11, fontWeight:700, color:ph.color, textTransform:"uppercase", letterSpacing:"0.09em" }}>{ph.label}</span>
+                        <span style={{ fontSize:10, color:C.gray400, backgroundColor:C.gray100, borderRadius:20, padding:"2px 9px", fontWeight:600 }}>{ph.range}</span>
+                      </div>
+                      <div style={{ fontSize:15, fontWeight:700, color:C.gray800 }}>{ph.title}</div>
+                    </div>
+                    <div style={{ fontSize:11, color:C.gray400, fontWeight:600 }}>{isOpen ? "fechar ▲" : "expandir ▼"}</div>
+                  </div>
+
+                  {/* Expanded content */}
+                  {isOpen && (
+                    <div style={{ borderTop:`0.5px solid ${C.border}`, padding:"22px 24px", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:22 }}>
+                      {/* Objetivo */}
+                      <div>
+                        <div style={{ fontSize:10, fontWeight:700, color:ph.color, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>Objetivo</div>
+                        <div style={{ fontSize:12.5, color:C.gray600, lineHeight:1.8, marginBottom:14 }}>{ph.objetivo}</div>
+                        <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:6 }}>Público-alvo</div>
+                        <div style={{ fontSize:12, color:C.gray600 }}>{ph.publico}</div>
+                        <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginTop:12, marginBottom:6 }}>Time</div>
+                        <div style={{ fontSize:12, color:C.gray600, lineHeight:1.6 }}>{ph.team}</div>
+                      </div>
+                      {/* Entregáveis */}
+                      <div>
+                        <div style={{ fontSize:10, fontWeight:700, color:ph.color, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>Entregáveis</div>
+                        <div style={{ display:"flex", flexDirection:"column", gap:7, marginBottom:18 }}>
+                          {ph.entregaveis.map(e => (
+                            <div key={e} style={{ display:"flex", gap:9, alignItems:"flex-start" }}>
+                              <div style={{ width:18, height:18, borderRadius:5, backgroundColor:ph.colorL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
+                                <span style={{ fontSize:9, color:ph.color, fontWeight:800 }}>✓</span>
+                              </div>
+                              <span style={{ fontSize:12, color:C.gray700||C.gray800, lineHeight:1.5 }}>{e}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      {/* Funcionalidades + Estratégia */}
+                      <div>
+                        <div style={{ fontSize:10, fontWeight:700, color:ph.color, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:10 }}>Funcionalidades-chave</div>
+                        <div style={{ display:"flex", flexDirection:"column", gap:4, marginBottom:18 }}>
+                          {ph.funcionalidades.map(f => (
+                            <div key={f} style={{ display:"flex", gap:8, alignItems:"flex-start" }}>
+                              <div style={{ width:4, height:4, borderRadius:"50%", backgroundColor:ph.color, flexShrink:0, marginTop:6 }}/>
+                              <span style={{ fontSize:11.5, color:C.gray600, lineHeight:1.5 }}>{f}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ backgroundColor:ph.colorL, borderRadius:10, padding:"12px 14px", border:`1px solid ${ph.color}22` }}>
+                          <div style={{ fontSize:10, fontWeight:700, color:ph.color, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:6 }}>Estratégia</div>
+                          <div style={{ fontSize:11.5, color:C.gray700||C.gray800, lineHeight:1.75 }}>{ph.estrategia}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Timeline strip */}
+        <div style={{ ...card(), padding:"20px 24px" }}>
+          <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:16 }}>Timeline Geral · 12 Meses</div>
+          <div style={{ display:"flex", gap:0, position:"relative" }}>
+            {[
+              { label:"F1 · App Investidor + BO", color:"#1A2445", months:"M1–M4", w:"33.3%" },
+              { label:"F2 · App Inquilino",        color:"#C44A18", months:"M5–M8", w:"33.3%" },
+              { label:"F3 · App Avançado",          color:"#2D7D46", months:"M9–M12", w:"33.3%" },
+            ].map((seg, i) => (
+              <div key={seg.label} style={{ width:seg.w, padding:"12px 16px", backgroundColor:seg.color, borderRadius: i===0?"10px 0 0 10px":i===2?"0 10px 10px 0":"0", borderLeft:i>0?"1px solid rgba(255,255,255,0.2)":"none" }}>
+                <div style={{ fontSize:10, color:"rgba(255,255,255,0.5)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:4 }}>{seg.months}</div>
+                <div style={{ fontSize:12.5, fontWeight:700, color:"#fff" }}>{seg.label}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(12,1fr)", gap:0, marginTop:8 }}>
+            {Array.from({length:12},(_,i)=>i+1).map(m => {
+              const color = m<=4?"#1A2445":m<=8?"#C44A18":"#2D7D46";
+              return (
+                <div key={m} style={{ textAlign:"center", padding:"4px 0", borderLeft:m>1?`0.5px solid ${C.border}`:"none" }}>
+                  <div style={{ fontSize:10, fontWeight:700, color }}> M{m}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -432,15 +489,17 @@ function SitemapNode({ sys, id, selected, onSelect }) {
   );
 }
 
-function PageArchitecture() {
+function PageArchitecture({ phase = "F1" }) {
   const [selected, setSelected] = useState(null);
+  const phaseColors = { F1:"#1A2445", F2:"#C44A18", F3:"#2D7D46" };
+  const phColor = phaseColors[phase];
 
   const SYSTEMS = {
     backend: {
       abbr: "API", label: "Backend & API", sub: "NestJS · PostgreSQL · Firebase",
       color: "#2D7D46", colorL: "#E8F5EE",
       profiles: ["API REST", "Auth JWT", "Push FCM", "Gateway Pgto"],
-      desc: "Backend unificado que serve os três apps e o backoffice. Autenticação por perfil (investidor/inquilino/admin), gestão financeira por fase, sistema de booking (F3), push notifications, integração bancária e CMS para conteúdo de obras.",
+      desc: "Backend unificado que serve os três apps e o backoffice. Autenticação por perfil (investidor/hóspede/admin), gestão financeira por fase, sistema de booking (F3), push notifications, integração bancária e CMS para conteúdo de obras.",
       screens: [
         { p: "Autenticação & Perfis", items: ["Login CPF/e-mail + senha", "FaceID / TouchID (investidor)", "3 perfis: Investidor · Inquilino · Admin", "JWT + refresh token", "RBAC por tipo de acesso"] },
         { p: "Dados & Integrações", items: ["ERP / gestão de contratos Menfe", "Gateway Pix, Boleto e cartão", "Firebase FCM (push)", "Galeria fotos S3/CDN", "CMS comunicados e atualizações de obra", "Webhook WhatsApp para leads (F1)"] },
@@ -463,9 +522,9 @@ function PageArchitecture() {
       abbr: "F2", label: "App do Inquilino · Fase 2", sub: "React Native · Área Logada",
       color: C.collD, colorL: C.collL,
       profiles: ["Inquilino", "iOS", "Android"],
-      desc: "Área logada exclusiva para inquilinos do Collegiate. Três pilares: financeiro (aluguel, segunda via, histórico de pagamentos), manual digital do imóvel (docs, regras de uso, FAQ) e informações gerais do prédio (portaria, áreas comuns, chamados). Sem busca ou booking — isso é F3.",
+      desc: "Área logada exclusiva para hóspedes do Collegiate. Três pilares: financeiro (aluguel, segunda via, histórico de pagamentos), manual digital do imóvel (docs, regras de uso, FAQ) e informações gerais do prédio (portaria, áreas comuns, chamados). Sem busca ou booking — isso é F3.",
       screens: [
-        { p: "Home & Boas-vindas", items: ["Saudação personalizada ao inquilino", "Resumo do contrato e unidade ativa", "Avisos e comunicados do prédio", "Atalhos para financeiro e manual"] },
+        { p: "Home & Boas-vindas", items: ["Saudação personalizada ao hóspede", "Resumo do contrato e unidade ativa", "Avisos e comunicados do prédio", "Atalhos para financeiro e manual"] },
         { p: "Financeiro", items: ["Valor do aluguel e data de vencimento", "Histórico de pagamentos com comprovantes", "Segunda via de boleto / Pix", "Alertas de vencimento por push"] },
         { p: "Manual do Imóvel", items: ["Guia digital de uso do imóvel", "Regras do condomínio", "Procedimentos de check-in/out", "FAQ e contatos úteis"] },
         { p: "Informações do Prédio", items: ["Serviços disponíveis e horários", "Contato da portaria e gestão", "Abertura de chamados de manutenção", "Notificações do condomínio"] },
@@ -475,43 +534,65 @@ function PageArchitecture() {
       abbr: "BO", label: "Backoffice Administrativo · F1", sub: "NextJS · Web Admin",
       color: "#7C3AED", colorL: "#EDE9FE",
       profiles: ["Admin", "Gestor", "Web"],
-      desc: "Painel de administração que acompanha a F1. Permite à equipe Menfe gerenciar investidores, empreendimentos, evolução de obra, contratos, financeiro e leads. Dashboard com visão consolidada e controle de permissões por papel.",
+      desc: "Painel de administração que acompanha a F1. Permite à equipe Menfe gerenciar investidores, empreendimentos, evolução de obra, contratos e financeiro. Dashboard com visão consolidada e controle de permissões por papel.",
       screens: [
-        { p: "Gestão de Usuários", items: ["CRUD de investidores e inquilinos", "Controle de perfis e permissões (RBAC)", "Histórico de acessos e atividades", "Notificações para usuários específicos"] },
+        { p: "Gestão de Usuários", items: ["CRUD de investidores e hóspedes", "Controle de perfis e permissões (RBAC)", "Histórico de acessos e atividades", "Notificações para usuários específicos"] },
         { p: "Empreendimentos & Obras", items: ["Cadastro e edição de empreendimentos", "Atualização de progresso de obra (%)", "Upload de fotos e relatórios mensais", "Gestão de unidades disponíveis"] },
         { p: "Financeiro & Contratos", items: ["Registro de aportes e dividendos", "Geração e envio de contratos PDF", "Conciliação bancária (Pix/Boleto)", "Relatórios financeiros por investidor"] },
-        { p: "Leads & Lançamentos", items: ["Painel de leads vindos do app (F1)", "Gestão de lançamentos e destaque", "Configuração do link WhatsApp/canal", "Métricas de conversão de interesse"] },
       ],
     },
     leads: {
       abbr: "F3", label: "App de Leads · Fase 3", sub: "React Native · Área Pública",
       color: "#2D7D46", colorL: "#E8F5EE",
       profiles: ["Lead", "Prospect", "iOS", "Android"],
-      desc: "Área deslogada do app voltada para captação de leads e conversão. Vitrine pública de empreendimentos Collegiate com busca, filtros e detalhe. Funcionalidade de booking para reserva de unidades e fluxo de conversão de lead em inquilino.",
+      desc: "Área deslogada do app voltada para captação de leads e conversão. Vitrine pública de empreendimentos Collegiate com busca, filtros e detalhe. Funcionalidade de booking para reserva de unidades e fluxo de conversão de lead em hóspede.",
       screens: [
         { p: "Vitrine & Busca", items: ["Lista de empreendimentos disponíveis", "Busca por cidade, tipo e faixa de preço", "Filtros avançados e categorias", "Detalhe do empreendimento com galeria e mapa"] },
         { p: "Booking & Conversão", items: ["Seleção de unidade disponível", "Agendamento de visita ou reserva", "Fluxo de cadastro de lead", "CTA para falar com consultor"] },
       ],
     },
+    collegiate_f3: {
+      abbr: "F3+", label: "App do Inquilino · Fase 3 — Novas features", sub: "React Native · Expansão F2 → F3",
+      color: "#B45309", colorL: "#FEF3C7",
+      profiles: ["Hóspede", "iOS", "Android", "F2 → F3"],
+      desc: "Expansão do App Collegiate entregue na Fase 2. A Fase 3 adiciona as funcionalidades avançadas de gestão do dia a dia: chat integrado, gestão completa de quartos, reserva de áreas comuns, mapas do empreendimento, chave de acesso digital e agendamento de serviços.",
+      screens: [
+        { p: "✦ Novo · Chat", items: ["Chat integrado com a gestão do empreendimento", "Mensagens diretas e comunicados do prédio", "Histórico de conversas", "Notificações de mensagens por push"] },
+        { p: "✦ Novo · Gestão de Quartos", items: ["Detalhes completos do quarto ocupado", "Check-in e check-out digital", "Solicitação de troca de quarto", "Histórico de ocupação"] },
+        { p: "✦ Novo · Áreas Comuns", items: ["Reserva de áreas comuns (piscina, churrasqueira, salão)", "Calendário de disponibilidade", "Histórico de reservas", "Notificação de confirmação"] },
+        { p: "✦ Novo · Acesso & Mapas", items: ["Chave de acesso digital via app", "Mapa interativo do empreendimento", "Agendamento de serviços (limpeza, manutenção)", "QR code de acesso a áreas restritas"] },
+      ],
+    },
   };
 
-  const sel = selected ? SYSTEMS[selected] : null;
+  const sel = selected ? (SYSTEMS[selected] || null) : null;
+
+  const nodesByPhase = {
+    F1: ["backend","menfe","backoffice"],
+    F2: ["backend","menfe","collegiate","backoffice"],
+    F3: ["backend","menfe","collegiate_f3","backoffice"],
+  };
+  const phaseLabels = { F1:"Fase 1 · App do Investidor + Backoffice + Backend F1", F2:"Fase 2 · App Collegiate + App Menfe F2 + Backoffice F2 + Backend F2", F3:"Fase 3 · App Collegiate F3 (novas features) + App Menfe (mantido) + Backoffice F3 + Backend F3" };
+  const visibleNodes = nodesByPhase[phase];
 
   function VLine() { return <div style={{ width: 1, height: 28, backgroundColor: "rgba(0,0,0,0.12)", margin: "0 auto" }} />; }
   function HLine() { return <div style={{ flex: 1, height: 1, backgroundColor: "rgba(0,0,0,0.12)", marginTop: 14 }} />; }
 
   return (
     <div style={{ flex: 1, overflowY: "auto", backgroundColor: C.offwhite }}>
-      <div style={{ padding: "10px 26px 12px", backgroundColor: C.white, borderBottom: `0.5px solid ${C.border}` }}>
-        <div style={{ fontSize: 11, color: C.gray400 }}>Arquitetura / Visão de sistemas, apps e integrações</div>
+      <div style={{ padding: "12px 26px 12px", backgroundColor: C.white, borderBottom: `0.5px solid ${C.border}`, borderTop:`3px solid ${phColor}` }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: phColor, marginBottom:2 }}>{phase === "F1" ? "Fase 1" : phase === "F2" ? "Fase 2" : "Fase 3"} · Arquitetura</div>
+        <div style={{ fontSize: 11, color: C.gray400 }}>{phaseLabels[phase]}</div>
       </div>
       <div style={{ padding: "28px 40px 40px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ fontSize: 12, color: C.gray400, marginBottom: 28 }}>
           Clique em qualquer sistema para expandir detalhes e funcionalidades
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 960 }}>
-          <SitemapNode sys={SYSTEMS.backend} id="backend" selected={selected} onSelect={setSelected} />
-          <VLine />
+          {visibleNodes.includes("backend") && <>
+            <SitemapNode sys={SYSTEMS.backend} id="backend" selected={selected} onSelect={setSelected} />
+            <VLine />
+          </>}
           <div style={{ display: "flex", alignItems: "flex-start", width: "100%", gap: 0 }}>
             <HLine />
             <div style={{ ...pill(C.greenL, "#2D7D46"), margin: "0 8px", flexShrink: 0, fontSize: 10 }}>API REST</div>
@@ -520,19 +601,22 @@ function PageArchitecture() {
             <HLine />
           </div>
           <div style={{ display: "flex", gap: 24, width: "100%", justifyContent: "center" }}>
-            {/* Left: F1 App + Backoffice */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1, maxWidth: 340 }}>
-              <VLine />
-              <SitemapNode sys={SYSTEMS.menfe} id="menfe" selected={selected} onSelect={setSelected} />
-              <VLine />
-              <SitemapNode sys={SYSTEMS.backoffice} id="backoffice" selected={selected} onSelect={setSelected} />
+              {visibleNodes.includes("menfe") && <><VLine /><SitemapNode sys={SYSTEMS.menfe} id="menfe" selected={selected} onSelect={setSelected} /></>}
+              {visibleNodes.includes("backoffice") && <><VLine /><SitemapNode sys={SYSTEMS.backoffice} id="backoffice" selected={selected} onSelect={setSelected} /></>}
             </div>
-            {/* Right: F2 + F3 */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1, maxWidth: 340 }}>
-              <VLine />
-              <SitemapNode sys={SYSTEMS.collegiate} id="collegiate" selected={selected} onSelect={setSelected} />
-              <VLine />
-              <SitemapNode sys={SYSTEMS.leads} id="leads" selected={selected} onSelect={setSelected} />
+              {visibleNodes.includes("collegiate") && <><VLine /><SitemapNode sys={SYSTEMS.collegiate} id="collegiate" selected={selected} onSelect={setSelected} /></>}
+              {visibleNodes.includes("collegiate_f3") && (
+                <>
+                  <VLine />
+                  <div style={{ position:"relative", width:"100%", maxWidth:400 }}>
+                    <SitemapNode sys={SYSTEMS.collegiate_f3} id="collegiate_f3" selected={selected} onSelect={setSelected} />
+                    <div style={{ position:"absolute", top:-10, right:8, backgroundColor:"#B45309", color:"#fff", fontSize:9, fontWeight:800, borderRadius:20, padding:"2px 9px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Expansão F2→F3</div>
+                  </div>
+                </>
+              )}
+              {visibleNodes.includes("leads") && <><VLine /><SitemapNode sys={SYSTEMS.leads} id="leads" selected={selected} onSelect={setSelected} /></>}
             </div>
           </div>
         </div>
@@ -545,19 +629,26 @@ function PageArchitecture() {
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.gray800 }}>{sel.label}</div>
                 <div style={{ fontSize: 11, color: C.gray400 }}>{sel.sub}</div>
               </div>
+              {sel.abbr === "F3+" && (
+                <div style={{ fontSize: 10.5, color: "#B45309", backgroundColor: "#FEF3C7", border: "1px solid #FCD34D", borderRadius: 8, padding: "4px 10px", fontWeight: 700 }}>
+                  ✦ Todas as telas abaixo são novas — construídas sobre a base da Fase 2
+                </div>
+              )}
               <button onClick={() => setSelected(null)} style={{ border: "none", background: "rgba(0,0,0,0.06)", borderRadius: 6, padding: "4px 12px", cursor: "pointer", fontSize: 11, color: C.gray600 }}>fechar ✕</button>
             </div>
             <div style={{ padding: "18px 22px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24 }}>
               <div>
-                <div style={{ fontSize: 10.5, color: C.gray400, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 14 }}>Telas e funcionalidades por módulo</div>
+                <div style={{ fontSize: 10.5, color: C.gray400, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 14 }}>
+                  {sel.abbr === "F3+" ? "Novas funcionalidades implementadas na Fase 3" : "Telas e funcionalidades por módulo"}
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   {sel.screens.map(sc => (
-                    <div key={sc.p}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: sel.color, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>{sc.p}</div>
+                    <div key={sc.p} style={{ backgroundColor: sc.p.startsWith("✦") ? "#FFFBEB" : "transparent", borderRadius: sc.p.startsWith("✦") ? 10 : 0, padding: sc.p.startsWith("✦") ? "10px 12px" : 0, border: sc.p.startsWith("✦") ? "1px solid #FCD34D" : "none" }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: sc.p.startsWith("✦") ? "#B45309" : sel.color, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>{sc.p}</div>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px 20px" }}>
                         {sc.items.map(it => (
                           <div key={it} style={{ fontSize: 12, color: "#555", display: "flex", gap: 7, alignItems: "flex-start", padding: "2px 0" }}>
-                            <span style={{ width: 4, height: 4, borderRadius: "50%", background: sel.color, flexShrink: 0, marginTop: 5 }} />{it}
+                            <span style={{ width: 4, height: 4, borderRadius: "50%", background: sc.p.startsWith("✦") ? "#B45309" : sel.color, flexShrink: 0, marginTop: 5 }} />{it}
                           </div>
                         ))}
                       </div>
@@ -578,199 +669,176 @@ function PageArchitecture() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PAGE: ROADMAP
+// PAGE: ROADMAP (phase-aware)
 // ═══════════════════════════════════════════════════════════════════════════════
-function PageRoadmap() {
-  const NM = 15;
-  const COL_W = 72;
-  const ROW_H = 34;
-  const LABEL_W = 230;
+const ROADMAP_DATA = {
+  F1: {
+    phaseLabel: "Fase 1", months: [1,2,3,4], color: "#1A2445", colorL: "#EEF0FC",
+    desc: "App do Investidor (React Native) + Backoffice Admin (NextJS) + Backend F1",
+    tracks: [
+      { label:"Backend · NestJS + PostgreSQL", badge:"BE", color:"#2D7D46", colorL:"#F0FAF4", items:[
+        { name:"Autenticação e RBAC",                    ms:[1] },
+        { name:"CRUD gerentes, empreendimentos, invest.", ms:[1] },
+        { name:"Logs e auditoria",                       ms:[1,2,3,4] },
+        { name:"Infraestrutura / DevOps",                ms:[1,2,3,4] },
+        { name:"Gestão financeira (investidor)",         ms:[1,2] },
+        { name:"Integração bancária (Pix, Boleto)",      ms:[2] },
+        { name:"Contratos",                              ms:[3] },
+        { name:"Gestão de patrimônio",                   ms:[3] },
+        { name:"Evolução de obra",                       ms:[4] },
+        { name:"Notificações push (FCM)",                ms:[4] },
+      ]},
+      { label:"App Menfe · React Native", badge:"MB", color:"#1A2445", colorL:"#EEF0FC", items:[
+        { name:"Autenticação e permissões",              ms:[1] },
+        { name:"Gestão Financeira",                      ms:[1,2] },
+        { name:"Log de Atividades",                      ms:[1,2,3,4] },
+        { name:"Listagem de Empreendimentos",            ms:[2] },
+        { name:"Patrimônio",                             ms:[2,3] },
+        { name:"Contratos",                              ms:[3] },
+        { name:"Evolução de Obra",                       ms:[4] },
+        { name:"Notificações",                           ms:[4] },
+      ]},
+      { label:"Backoffice · NextJS", badge:"BO", color:"#7C3AED", colorL:"#F5F3FF", items:[
+        { name:"Gerenciamento de permissões (RBAC)",     ms:[1] },
+        { name:"Gestão Financeira",                      ms:[1] },
+        { name:"Logs de acessos e atividades",           ms:[1,2,3,4] },
+        { name:"Gestão de Obras",                        ms:[2] },
+        { name:"Gestão de Empreendimentos",              ms:[2,3] },
+        { name:"Gestão de Contratos",                    ms:[4] },
+      ]},
+      { label:"Design · Product Designer", badge:"UX", color:"#0E7490", colorL:"#ECFEFF", items:[
+        { name:"Design System & Componentes F1",         ms:[1,2] },
+        { name:"Protótipo App do Investidor",            ms:[1,2] },
+        { name:"Handoff F1 para dev",                   ms:[2] },
+      ]},
+      { label:"Gestão de Projeto", badge:"GP", color:"#BE185D", colorL:"#FCE7F3", items:[
+        { name:"Coordenação · 40h/mês",                  ms:[1,2,3,4] },
+      ]},
+    ],
+  },
+  F2: {
+    phaseLabel: "Fase 2", months: [5,6,7,8], color: "#C44A18", colorL: "#FEF0EB",
+    desc: "App Collegiate Inquilino + App Menfe F2 + Backoffice F2 + Backend F2",
+    tracks: [
+      { label:"Backend · NestJS + PostgreSQL", badge:"BE", color:"#2D7D46", colorL:"#F0FAF4", items:[
+        { name:"Sistema de venda de empreendimentos",    ms:[5,6] },
+        { name:"Gestão de carrinho (investidores)",      ms:[6] },
+        { name:"CRUD quartos, hóspedes",                 ms:[6] },
+        { name:"Gestão de carrinho (hóspedes)",          ms:[7] },
+        { name:"Sistema de booking",                     ms:[7,8] },
+        { name:"Gestão financeira (hóspedes)",           ms:[8] },
+      ]},
+      { label:"App Menfe · React Native", badge:"MB", color:"#1A2445", colorL:"#EEF0FC", items:[
+        { name:"Mapas",                                  ms:[5] },
+        { name:"Gestão de Investimentos",                ms:[5] },
+        { name:"Carrinho",                               ms:[6] },
+      ]},
+      { label:"App Collegiate · React Native", badge:"CO", color:"#C44A18", colorL:"#FEF0EB", items:[
+        { name:"Autenticação e permissões",              ms:[5] },
+        { name:"Perfil",                                 ms:[5] },
+        { name:"Lista de Quartos",                       ms:[6] },
+        { name:"Serviços",                               ms:[6] },
+        { name:"Carrinho",                               ms:[7] },
+        { name:"Gestão de Reservas",                     ms:[7] },
+        { name:"Financeiro",                             ms:[8] },
+        { name:"Avisos e Notificações",                  ms:[8] },
+      ]},
+      { label:"Backoffice · NextJS", badge:"BO", color:"#7C3AED", colorL:"#F5F3FF", items:[
+        { name:"Gestão de Hóspedes",                     ms:[6] },
+        { name:"Gestão de Quartos",                      ms:[6] },
+        { name:"Gestão de Serviços",                     ms:[6] },
+        { name:"Gestão de Reservas",                     ms:[7,8] },
+      ]},
+      { label:"Design · Product Designer · 1,5 mês", badge:"UX", color:"#0E7490", colorL:"#ECFEFF", items:[
+        { name:"Design System & Protótipo App Collegiate", ms:[5,6] },
+        { name:"Handoff F2 para dev",                      ms:[6] },
+      ]},
+      { label:"Gestão de Projeto", badge:"GP", color:"#BE185D", colorL:"#FCE7F3", items:[
+        { name:"Coordenação · 40h/mês",                  ms:[5,6,7,8] },
+      ]},
+    ],
+  },
+  F3: {
+    phaseLabel: "Fase 3", months: [9,10,11,12], color: "#2D7D46", colorL: "#E8F5EE",
+    desc: "App Collegiate F3 + Backoffice F3 + Backend F3",
+    tracks: [
+      { label:"Backend · NestJS + PostgreSQL", badge:"BE", color:"#2D7D46", colorL:"#F0FAF4", items:[
+        { name:"Gestão de quartos",                      ms:[9] },
+        { name:"Reservas de áreas comuns e serviços",    ms:[9] },
+        { name:"Acessos (chaves e amenidades)",          ms:[10] },
+      ]},
+      { label:"App Collegiate · React Native", badge:"CO", color:"#C44A18", colorL:"#FEF0EB", items:[
+        { name:"Chat",                                   ms:[9] },
+        { name:"Gestão de Quartos",                      ms:[9,10] },
+        { name:"Reserva de áreas comuns",                ms:[10] },
+        { name:"Mapas",                                  ms:[11] },
+        { name:"Chave de acesso",                        ms:[11] },
+        { name:"Agendamento de serviços",                ms:[12] },
+      ]},
+      { label:"Backoffice · NextJS", badge:"BO", color:"#7C3AED", colorL:"#F5F3FF", items:[
+        { name:"Gestão de áreas comuns",                 ms:[9] },
+      ]},
+      { label:"Design · Product Designer · 2 meses", badge:"UX", color:"#0E7490", colorL:"#ECFEFF", items:[
+        { name:"Design System & Protótipo App Leads F3", ms:[9,10] },
+        { name:"Handoff F3 para dev",                    ms:[10] },
+      ]},
+      { label:"Gestão de Projeto", badge:"GP", color:"#BE185D", colorL:"#FCE7F3", items:[
+        { name:"Coordenação · 40h/mês",                  ms:[9,10,11,12] },
+      ]},
+    ],
+  },
+};
 
-  const PHASES = [
-    { id:"F1", range:"M1–M5",  title:"App do Investidor + Backoffice", color:"#2D7D46", desc:"Auth, CRUD base, portfólio, obras, financeiro do investidor, hall de lançamentos com 'Quero Investir' e backoffice de gestão." },
-    { id:"F2", range:"M6–M10", title:"App do Inquilino · Área Logada",  color:"#1A2445", desc:"App do inquilino Collegiate: financeiro, manual digital do imóvel, informações do prédio, notificações e chamados." },
-    { id:"F3", range:"M11–M15",title:"App de Leads · Busca & Booking",  color:"#C44A18", desc:"Área deslogada com vitrine pública, busca e filtros de empreendimentos, assistente de busca e funcionalidade de booking." },
-  ];
-
-  const TRACKS = [
-    {
-      label:"F0 — Backend (NestJS + PostgreSQL)", badge:"F0", color:"#2D7D46", colorL:"#F0FAF4",
-      items:[
-        { name:"Autenticação e RBAC (3 perfis)",                ms:[1] },
-        { name:"CRUD gerentes, empreendimentos, investidores",   ms:[1,2] },
-        { name:"Infraestrutura / DevOps",                        ms:[1,2,3,4,5,6,7,8,9,10,11,12,13] },
-        { name:"Sistema de venda de empreendimentos",            ms:[2,3] },
-        { name:"Contratos e documentos PDF",                     ms:[3,4] },
-        { name:"Gestão financeira (investidor)",                 ms:[4,5] },
-        { name:"Integração bancária (Pix, Boleto)",              ms:[5] },
-        { name:"Logs e auditoria",                               ms:[5,6] },
-        { name:"Gestão de patrimônio e equity",                  ms:[6] },
-        { name:"Evolução de obra em tempo real",                 ms:[6] },
-        { name:"Webhook / integração WhatsApp leads",            ms:[4] },
-        { name:"CRUD inquilinos e unidades",                     ms:[7] },
-        { name:"Gestão financeira (inquilino)",                  ms:[7,8] },
-        { name:"Manual e informações do imóvel",                 ms:[8] },
-        { name:"Sistema de Chat",                                ms:[9] },
-        { name:"Notificações push (FCM)",                        ms:[9] },
-        { name:"Sistema de booking e reservas",                  ms:[10,11] },
-        { name:"Busca e filtros de empreendimentos (leads)",     ms:[11,12] },
-      ],
-    },
-    {
-      label:"F1 — App do Investidor (React Native)", badge:"F1", color:"#1A2445", colorL:"#F0F2F8",
-      items:[
-        { name:"Mockup e Design System",                         ms:[1,2] },
-        { name:"Login e autenticação",                           ms:[2] },
-        { name:"Home — patrimônio e atividade recente",          ms:[3] },
-        { name:"Portfólio de empreendimentos",                   ms:[3,4] },
-        { name:"Evolução de obra em tempo real",                 ms:[4] },
-        { name:"Gestão financeira e dividendos",                 ms:[4,5] },
-        { name:"Hall de lançamentos",                            ms:[5] },
-        { name:"Botão 'Quero Investir' → WhatsApp",              ms:[5] },
-        { name:"Contratos — download PDF",                       ms:[5] },
-        { name:"Chat com equipe Menfe",                          ms:[6] },
-        { name:"Notificações e log de atividades",               ms:[6] },
-        { name:"Perfil do investidor",                           ms:[6] },
-      ],
-    },
-    {
-      label:"BO — Backoffice Admin (NextJS Web)", badge:"BO", color:"#7C3AED", colorL:"#F5F3FF",
-      items:[
-        { name:"Gerenciamento de permissões e RBAC",             ms:[1] },
-        { name:"Logs de acessos e atividades",                   ms:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] },
-        { name:"Gestão de empreendimentos e unidades",           ms:[2,3] },
-        { name:"Gestão de evolução de obra",                     ms:[3,4] },
-        { name:"Gestão de contratos",                            ms:[4,5] },
-        { name:"Painel financeiro do investidor",                ms:[5,6] },
-        { name:"Gestão de leads e lançamentos",                  ms:[5,6] },
-        { name:"Gestão de inquilinos (F2)",                      ms:[7,8] },
-        { name:"Painel financeiro do inquilino (F2)",            ms:[8,9] },
-      ],
-    },
-    {
-      label:"F2 — App do Inquilino (React Native · Logado)", badge:"F2", color:"#C44A18", colorL:"#FDF3EF",
-      items:[
-        { name:"Mockup e Design System F2",                      ms:[6,7] },
-        { name:"Login e autenticação inquilino",                 ms:[7] },
-        { name:"Home do inquilino e informações do contrato",    ms:[8] },
-        { name:"Painel financeiro — aluguel e histórico",        ms:[8,9] },
-        { name:"Segunda via boleto / Pix",                       ms:[9] },
-        { name:"Manual digital do imóvel",                       ms:[9,10] },
-        { name:"Informações do prédio e portaria",               ms:[10] },
-        { name:"Chamados de manutenção",                         ms:[10] },
-        { name:"Notificações do condomínio",                     ms:[11] },
-      ],
-    },
-    {
-      label:"F3 — App de Leads · Área Deslogada", badge:"F3", color:"#B45309", colorL:"#FEF3C7",
-      items:[
-        { name:"Mockup e Design System F3",                      ms:[10,11] },
-        { name:"Vitrine pública de empreendimentos",             ms:[11,12] },
-        { name:"Busca com filtros (cidade, tipo, preço)",        ms:[12] },
-        { name:"Detalhe de empreendimento com galeria e mapa",   ms:[12,13] },
-        { name:"Assistente de busca (5 perguntas)",              ms:[13] },
-        { name:"Fluxo de booking e reserva de unidade",          ms:[13,14] },
-        { name:"Cadastro de lead e conversão",                   ms:[14] },
-        { name:"Integração CRM e equipe comercial",              ms:[15] },
-        { name:"Notificações e follow-up de leads",              ms:[15] },
-      ],
-    },
-  ];
-
-  // phase band for each month (1-based)
-  const phaseOf = m => m<=5?"F1":m<=10?"F2":"F3";
-  const phaseColor = { F1:"#2D7D46", F2:"#1A2445", F3:"#C44A18" };
-  const phaseSub   = { F1:"Investidor + BO", F2:"Inquilino", F3:"Leads" };
+function PageRoadmapPhase({ phase }) {
+  const COL_W = 88;
+  const ROW_H = 32;
+  const LABEL_W = 240;
+  const data = ROADMAP_DATA[phase];
+  const months = data.months;
+  const NM = months.length;
+  const phColor = data.color;
 
   return (
     <div style={{ flex:1, overflowY:"auto", backgroundColor:C.white }}>
-
-      {/* ── Topbar ── */}
-      <div style={{ padding:"14px 24px 10px", borderBottom:`0.5px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <div>
-          <div style={{ fontSize:11, color:C.gray400 }}>Roadmap / 15 meses · F1 App Investidor + Backoffice M1–M6 · F2 App Inquilino M6–M11 · F3 App Leads M10–M15</div>
-        </div>
+      {/* Header */}
+      <div style={{ padding:"14px 24px 12px", borderBottom:`0.5px solid ${C.border}`, background:`linear-gradient(135deg,${phColor}08,${phColor}03)`, borderTop:`3px solid ${phColor}` }}>
+        <div style={{ fontSize:16, fontWeight:800, color:phColor, marginBottom:3 }}>{data.phaseLabel} · Roadmap</div>
+        <div style={{ fontSize:11.5, color:C.gray400 }}>{data.desc}</div>
       </div>
 
-      {/* ── Phase milestone cards ── */}
-      <div style={{ display:"flex", gap:0, borderBottom:`0.5px solid ${C.border}` }}>
-        {PHASES.map((ph,i) => (
-          <div key={ph.id} style={{ flex:1, padding:"16px 22px", borderLeft: i>0?`0.5px solid ${C.border}`:"none", borderTop:`3px solid ${ph.color}` }}>
-            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:7 }}>
-              <div style={{ width:9, height:9, borderRadius:"50%", backgroundColor:ph.color, flexShrink:0 }} />
-              <span style={{ fontSize:11.5, fontWeight:700, color:ph.color, letterSpacing:"0.06em" }}>{ph.range}</span>
-            </div>
-            <div style={{ fontSize:14, fontWeight:700, color:C.gray800, marginBottom:5 }}>{ph.title}</div>
-            <div style={{ fontSize:11.5, color:C.gray400, lineHeight:1.6 }}>{ph.desc}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Legend ── */}
-      <div style={{ display:"flex", gap:22, padding:"12px 24px", borderBottom:`0.5px solid ${C.border}`, backgroundColor:C.gray50 }}>
-        {TRACKS.map(t => (
-          <div key={t.badge} style={{ display:"flex", alignItems:"center", gap:7 }}>
-            <div style={{ width:12, height:12, borderRadius:3, backgroundColor:t.color, flexShrink:0 }} />
-            <span style={{ fontSize:12, color:C.gray600, fontWeight:500 }}>{t.badge} · {t.label.split("—")[1].trim().split("(")[0].trim()}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Gantt ── */}
-      <div style={{ overflowX:"auto" }}>
-        <div style={{ minWidth: LABEL_W + NM*COL_W + 24, padding:"0 24px 40px" }}>
-
-          {/* Column headers */}
-          <div style={{ display:"flex", paddingTop:12, marginBottom:0 }}>
-            <div style={{ width:LABEL_W, flexShrink:0, fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", display:"flex", alignItems:"flex-end", paddingBottom:8, borderBottom:`0.5px solid ${C.border}` }}>FEATURE</div>
-            {Array.from({length:NM},(_,i)=>i+1).map(m => {
-              const ph = phaseOf(m);
-              const pc = phaseColor[ph];
-              return (
-                <div key={m} style={{ width:COL_W, flexShrink:0, textAlign:"center", paddingBottom:8, borderBottom:`0.5px solid ${C.border}`, borderLeft:`0.5px solid ${C.border}` }}>
-                  <div style={{ fontSize:13, fontWeight:700, color:pc }}>M{m}</div>
-                  <div style={{ fontSize:10, color:C.gray400, marginTop:2 }}>{phaseSub[ph].split(" ")[0]}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Tracks */}
-          {TRACKS.map((track, ti) => (
-            <div key={track.badge}>
-              {/* Track header row */}
-              <div style={{ display:"flex", alignItems:"center", backgroundColor:track.colorL }}>
-                <div style={{ width:LABEL_W, flexShrink:0, padding:"10px 0 10px 0", display:"flex", alignItems:"center", gap:10, borderBottom:`0.5px solid ${C.border}` }}>
-                  <div style={{ width:26, height:26, borderRadius:6, backgroundColor:track.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, color:"#fff", flexShrink:0 }}>{track.badge}</div>
-                  <span style={{ fontSize:12.5, fontWeight:700, color:track.color, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{track.label}</span>
-                </div>
-                {Array.from({length:NM},(_,i)=>i+1).map(m => (
-                  <div key={m} style={{ width:COL_W, flexShrink:0, height:"100%", borderLeft:`0.5px solid ${C.border}`, borderBottom:`0.5px solid ${C.border}` }} />
-                ))}
+      {/* Gantt */}
+      <div style={{ padding:"20px 24px 36px", overflowX:"auto" }}>
+        <div style={{ minWidth: LABEL_W + NM*COL_W }}>
+          {/* Month header */}
+          <div style={{ display:"flex", marginBottom:4 }}>
+            <div style={{ width:LABEL_W, flexShrink:0 }} />
+            {months.map(m => (
+              <div key={m} style={{ width:COL_W, flexShrink:0, textAlign:"center", paddingBottom:7, borderBottom:`2px solid ${phColor}`, borderLeft:`0.5px solid ${C.border}` }}>
+                <div style={{ fontSize:13, fontWeight:800, color:phColor }}>M{m}</div>
               </div>
+            ))}
+          </div>
 
-              {/* Feature rows */}
-              {track.items.map((item, ri) => {
+          {data.tracks.map((track, ti) => (
+            <div key={track.badge}>
+              {/* Track header */}
+              <div style={{ display:"flex", alignItems:"center", gap:9, padding:"10px 0 5px", marginTop: ti>0?12:0 }}>
+                <div style={{ width:26, height:26, borderRadius:7, backgroundColor:track.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:800, color:"#fff", flexShrink:0 }}>{track.badge}</div>
+                <span style={{ fontSize:11, fontWeight:700, color:track.color, textTransform:"uppercase", letterSpacing:"0.07em" }}>{track.label}</span>
+              </div>
+              {track.items.map((item) => {
                 const minM = Math.min(...item.ms);
                 const maxM = Math.max(...item.ms);
-                const barLeft = LABEL_W + (minM-1)*COL_W + 4;
-                const barW    = (maxM-minM+1)*COL_W - 8;
-                const barLabel = `M${minM}${maxM>minM?"–M"+maxM:""}`;
-
+                const barLeft = LABEL_W + (minM - months[0]) * COL_W + 4;
+                const barW    = (maxM - minM + 1) * COL_W - 8;
                 return (
-                  <div key={item.name} style={{ display:"flex", alignItems:"center", height:ROW_H, position:"relative", backgroundColor: ri%2===0 ? C.white : C.gray50 }}>
-                    {/* Label */}
-                    <div style={{ width:LABEL_W, flexShrink:0, fontSize:12, color:C.gray600, paddingLeft:44, paddingRight:12, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:8, borderBottom:`0.5px solid ${C.border}`, height:"100%" }}>
-                      <div style={{ width:5, height:5, borderRadius:"50%", backgroundColor:C.gray200, flexShrink:0 }} />
-                      {item.name}
-                    </div>
-                    {/* Grid columns */}
-                    {Array.from({length:NM},(_,i)=>i+1).map(m => (
-                      <div key={m} style={{ width:COL_W, flexShrink:0, height:"100%", borderLeft:`0.5px solid ${C.border}`, borderBottom:`0.5px solid ${C.border}` }} />
+                  <div key={item.name} style={{ display:"flex", height:ROW_H, position:"relative", borderBottom:`0.5px solid ${C.border}` }}>
+                    <div style={{ width:LABEL_W, flexShrink:0, display:"flex", alignItems:"center", paddingLeft:16, fontSize:11.5, color:C.gray600 }}>{item.name}</div>
+                    {months.map(m => (
+                      <div key={m} style={{ width:COL_W, flexShrink:0, height:"100%", borderLeft:`0.5px solid ${C.border}` }} />
                     ))}
-                    {/* Bar */}
-                    <div style={{ position:"absolute", left:barLeft, width:barW, top:5, bottom:5, backgroundColor:track.color, borderRadius:5, display:"flex", alignItems:"center", paddingLeft:9, overflow:"hidden", opacity:0.88 }}>
-                      <span style={{ fontSize:10.5, fontWeight:700, color:"#fff", whiteSpace:"nowrap", opacity: barW>52?1:0 }}>{barLabel}</span>
+                    <div style={{ position:"absolute", left:barLeft, width:barW, top:5, bottom:5, backgroundColor:track.color, borderRadius:5, opacity:0.85, display:"flex", alignItems:"center", paddingLeft:8, overflow:"hidden" }}>
+                      <span style={{ fontSize:10, fontWeight:700, color:"#fff", whiteSpace:"nowrap", opacity:barW>60?1:0 }}>{item.name}</span>
                     </div>
                   </div>
                 );
@@ -783,265 +851,158 @@ function PageRoadmap() {
   );
 }
 
+function PageRoadmap() { return <PageRoadmapPhase phase="F1" />; }
+
 // ═══════════════════════════════════════════════════════════════════════════════
-// PAGE: TEAM
+// PAGE: TEAM (phase-aware)
 // ═══════════════════════════════════════════════════════════════════════════════
-function PageTeam() {
-  const NM = 15;
-  const COL_W = 62;
-  const ROW_H = 48;
-  const LABEL_W = 175;
-  const DED_W   = 130;
 
-  const phaseOf    = m => m<=5?"F1":m<=10?"F2":"F3";
-  const phaseColor = { F1:"#2D7D46", F2:"#1A2445", F3:"#C44A18" };
-  const phaseBg    = { F1:"#F0FAF4", F2:"#F0F2F8", F3:"#FDF3EF" };
-  const phaseSub   = { F1:"Investidor+BO", F2:"Inquilino", F3:"Leads" };
+const TEAM_DATA = {
+  F1: {
+    phaseLabel:"Fase 1", months:[1,2,3,4], color:"#1A2445",
+    roles:[
+      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[1,4], skills:["NestJS","PostgreSQL","JWT","Docker","CI/CD"], resp:["Auth e RBAC","Financeiro investidor","Contratos e patrimônio","Logs, auditoria e DevOps"] },
+      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[1,4], skills:["React Native","TypeScript","iOS","Android","FCM"], resp:["App Menfe F1 completo","Auth, portfólio, obras, financeiro","Notificações push e log de atividades"] },
+      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[1,4], skills:["NextJS","React","TypeScript","CSS Modules"], resp:["Backoffice Admin completo","RBAC, gestão de obras e contratos","Painel financeiro e investidores"] },
+      { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês",  color:"#0E7490", ms:[1,2], skills:["Figma","Design System","Handoff","UX Research"], resp:["Design System Menfe","Protótipo App do Investidor","Handoff para dev"] },
+      { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[1,4], skills:["Scrum","Jira","Roadmap","Stakeholders"], resp:["Coordenação do squad","Gestão de backlog e sprints","Relatórios de progresso"] },
+    ],
+  },
+  F2: {
+    phaseLabel:"Fase 2", months:[5,6,7,8], color:"#C44A18",
+    roles:[
+      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[5,8], skills:["NestJS","Booking","Gateway Pgto"], resp:["Sistema de venda e booking","Carrinho investidor e hóspedes","Financeiro hóspedes"] },
+      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[5,8], skills:["React Native","TypeScript","iOS","Android"], resp:["App Collegiate: auth, quartos, reservas","App Menfe F2: mapas, investimentos, carrinho"] },
+      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[5,8], skills:["NextJS","React","TypeScript"], resp:["Backoffice: hóspedes, quartos, serviços","Gestão de reservas F2"] },
+      { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês · 1,5 mês",  color:"#0E7490", ms:[5,6], skills:["Figma","Design System","Handoff"], resp:["Design System Collegiate","Protótipo App Collegiate","Protótipo App Menfe F2","Handoff F2"] },
+      { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[5,8], skills:["Scrum","Jira","Roadmap"], resp:["Coordenação F2","Backlog e sprints","Alinhamento stakeholders"] },
+    ],
+  },
+  F3: {
+    phaseLabel:"Fase 3", months:[9,10,11,12], color:"#2D7D46",
+    roles:[
+      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[9,10], skills:["NestJS","PostgreSQL","Acessos"], resp:["Gestão de quartos e reservas","Áreas comuns e serviços","Chaves e acessos"] },
+      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[9,12], skills:["React Native","TypeScript","iOS","Android"], resp:["App Collegiate F3: chat, quartos","Reservas áreas comuns, mapas","Chave de acesso e agendamento"] },
+      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[9,9],  skills:["NextJS","React"], resp:["Backoffice: gestão de áreas comuns"] },
+      { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês · 2 meses",  color:"#0E7490", ms:[9,10], skills:["Figma","Handoff","UX Research"], resp:["Protótipo App Leads F3","Handoff F3 completo","Ajustes e validações finais"] },
+      { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[9,12], skills:["Scrum","Jira","Go-live"], resp:["Coordenação F3 e go-live","Gestão de riscos finais","Entrega e encerramento"] },
+    ],
+  },
+};
 
-  // bars: array of { ms:[start,end], label, lite }
-  // lite=false → full/part-time solid bar; lite=true → hatched 20h/mês bar
-  const ROLES = [
-    {
-      abbr:"UX", role:"Product Designer Pleno",
-      type:"Part-time → 20h/mês", range:"M1–M6 · M7–M10",
-      color:"#0E7490", colorL:"#ECFEFF",
-      hours:"700h (com margem)",
-      bars:[
-        { ms:[1,6],  label:"Part time", lite:false, opacity:0.72 },
-        { ms:[7,10], label:"20h/mês",   lite:true,  opacity:0.55 },
-      ],
-      skills:["Figma","Design System","Prototipação","UX Research","Handoff"],
-      resp:["Protótipo de todas as telas (App Investidor F1, Inquilino F2 e Leads F3)","Sistema de design e componentes Menfe","Validação com stakeholders","Handoff completo para desenvolvimento","Suporte a ajustes de UI durante dev (M7–M10)"],
-    },
-    {
-      abbr:"BE", role:"Backend Pleno",
-      type:"Full-time", range:"M1–M13",
-      color:"#2D7D46", colorL:"#E6F4EE",
-      hours:"1.812h (com margem)",
-      bars:[{ ms:[1,13], label:"Full time", lite:false, opacity:0.9 }],
-      skills:["Node.js","NestJS","API REST","JWT","PostgreSQL","Docker","CI/CD"],
-      resp:["Autenticação, RBAC (3 perfis) e segurança","Sistema de venda, booking (F3) e chat","Gestão financeira investidor e inquilino","Integração bancária (Pix, Boleto)","CRUD empreendimentos, unidades, usuários","Contratos, reservas e patrimônio","Evolução de obra e gestão de acessos","Webhook WhatsApp para leads (F1)","Logs, auditoria e infraestrutura/DevOps"],
-    },
-    {
-      abbr:"FE", role:"Frontend Pleno",
-      type:"Full-time", range:"M1–M15",
-      color:"#7C3AED", colorL:"#EDE9FE",
-      hours:"1.425h (com margem)",
-      bars:[{ ms:[1,15], label:"Full time", lite:false, opacity:0.9 }],
-      skills:["NextJS","React","TypeScript","CSS Modules","Backoffice Web"],
-      resp:["Backoffice web completo em NextJS (F1)","Gestão de empreendimentos e contratos","Painéis financeiros e gestão de obras","Gestão de usuários: investidores e inquilinos","Painel de leads e lançamentos","Gerenciamento de permissões e logs"],
-    },
-    {
-      abbr:"MB", role:"Mobile Pleno",
-      type:"Full-time", range:"M1–M15",
-      color:"#1A2445", colorL:"#EEF0FC",
-      hours:"2.275h (com margem)",
-      bars:[{ ms:[1,15], label:"Full time", lite:false, opacity:0.9 }],
-      skills:["React Native","TypeScript","Firebase FCM","iOS","Android"],
-      resp:["App Menfe F1 — Investidor (React Native)","App Collegiate F2 — Inquilino (React Native)","App Leads F3 — Vitrine pública + Booking","Auth, portfólio, obras, financeiro e hall","Inquilino: financeiro, manual e infos do prédio","Leads: busca, filtros, booking e cadastro","Push notifications e perfil"],
-    },
-    {
-      abbr:"GP", role:"Gestor de Projetos",
-      type:"40h/mês", range:"M1–M15",
-      color:"#BE185D", colorL:"#FCE7F3",
-      hours:"750h (com margem)",
-      bars:[{ ms:[1,15], label:"40h/mês", lite:true, opacity:0.65 }],
-      skills:["Gestão ágil","Scrum","Jira","Comunicação","Roadmap"],
-      resp:["Coordenação do squad e cerimônias ágeis","Gestão de backlog e priorização de sprints","Alinhamento com stakeholders e cliente","Controle de cronograma e entregas","Gestão de riscos e impedimentos","Relatórios de progresso mensais"],
-    },
-    {
-      abbr:"QA", role:"QA / Testes",
-      type:"20h/mês", range:"M3–M14",
-      color:"#B45309", colorL:"#FEF3C7",
-      hours:"300h (com margem)",
-      bars:[{ ms:[3,14], label:"20h/mês", lite:true, opacity:0.65 }],
-      skills:["Testes funcionais","Regressão","E2E","Performance","Bug tracking"],
-      resp:["Testes funcionais dos dois apps","Regressão a cada sprint","Testes E2E e de integração","Testes de performance e carga","Reporte e acompanhamento de bugs"],
-    },
-  ];
+function PageTeamPhase({ phase }) {
+  const COL_W = 100;
+  const ROW_H = 44;
+  const LABEL_W = 200;
+  const DED_W = 160;
+  const data = TEAM_DATA[phase];
+  const months = data.months;
+  const phColor = data.color;
 
-  const horasTotal = [
-    { app:"Designer",           h:"560h",   hm:"700h",   color:"#0E7490" },
-    { app:"Backend",            h:"1.370h", hm:"1.712h", color:"#2D7D46" },
-    { app:"App Investidor F1",  h:"820h",   hm:"1.025h", color:"#1A2445" },
-    { app:"Backoffice F1",      h:"1.140h", hm:"1.425h", color:"#7C3AED" },
-    { app:"App Inquilino F2",   h:"480h",   hm:"600h",   color:"#C44A18" },
-    { app:"App Leads F3",       h:"760h",   hm:"950h",   color:"#B45309" },
-    { app:"Gestor de Projetos", h:"600h",   hm:"750h",   color:"#BE185D" },
-    { app:"QA / Testes",        h:"240h",   hm:"300h",   color:"#B45309" },
-  ];
-
-  // hatched pattern style for 20h/mês bars
-  const hatch = (color, opacity) => ({
-    background: `repeating-linear-gradient(45deg, ${color}${Math.round(opacity*255).toString(16).padStart(2,"0")}, ${color}${Math.round(opacity*255).toString(16).padStart(2,"0")} 4px, transparent 4px, transparent 9px)`,
+  const hatch = (color) => ({
+    background: `repeating-linear-gradient(45deg, ${color}BB, ${color}BB 4px, transparent 4px, transparent 9px)`,
     border: `1.5px solid ${color}`,
-    opacity: 1,
   });
+
+  const isLite = (abbr) => abbr === "UX" || abbr === "GP";
 
   return (
     <div style={{ flex:1, overflowY:"auto", backgroundColor:C.white }}>
-
-      {/* ── Topbar ── */}
-      <div style={{ padding:"14px 24px 10px", borderBottom:`0.5px solid ${C.border}` }}>
-        <div style={{ fontSize:11, color:C.gray400 }}>Equipe / Composição do time e dedicação por mês</div>
+      <div style={{ padding:"14px 24px 12px", borderBottom:`0.5px solid ${C.border}`, borderTop:`3px solid ${phColor}`, background:`linear-gradient(135deg,${phColor}08,transparent)` }}>
+        <div style={{ fontSize:16, fontWeight:800, color:phColor, marginBottom:3 }}>{data.phaseLabel} · Equipe</div>
+        <div style={{ fontSize:11.5, color:C.gray400 }}>Composição do time e dedicação por mês</div>
       </div>
 
-      {/* ── Summary cards ── */}
-      <div style={{ display:"flex", gap:0, borderBottom:`0.5px solid ${C.border}` }}>
-        {[
-          { label:"PESSOAS NO TIME", value:"6",           sub:"Backend · Frontend · Mobile · Designer · QA · GP", accent:"#2D7D46" },
-          { label:"PERÍODO",         value:"15–16 meses", sub:"M1–M15 · Design → Dev → QA → Go-live",        accent:"#1A2445" },
-          { label:"TOTAL DE HORAS",  value:"6.962h",      sub:"5.570h base + 1.392h margem de segurança",    accent:"#7C3AED" },
-        ].map((c,i) => (
-          <div key={c.label} style={{ flex:1, padding:"22px 28px", borderLeft:i>0?`0.5px solid ${C.border}`:"none", borderTop:`3px solid ${c.accent}` }}>
-            <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:8 }}>{c.label}</div>
-            <div style={{ fontSize:28, fontWeight:800, color:C.gray800, letterSpacing:"-0.5px", marginBottom:6 }}>{c.value}</div>
-            <div style={{ fontSize:11.5, color:C.gray400 }}>{c.sub}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Gantt de dedicação ── */}
-      <div style={{ padding:"20px 24px 0", borderBottom:`0.5px solid ${C.border}` }}>
-        <div style={{ fontSize:12, fontWeight:700, color:C.gray800, marginBottom:14 }}>Composição e Dedicação por Mês</div>
-        <div style={{ overflowX:"auto" }}>
-          <div style={{ minWidth: LABEL_W + DED_W + NM*COL_W }}>
-
-            {/* Header */}
-            <div style={{ display:"flex" }}>
-              <div style={{ width:LABEL_W, flexShrink:0, fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", paddingBottom:8, borderBottom:`0.5px solid ${C.border}` }}>PAPEL</div>
-              <div style={{ width:DED_W, flexShrink:0, fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", paddingBottom:8, borderBottom:`0.5px solid ${C.border}` }}>DEDICAÇÃO</div>
-              {Array.from({length:NM},(_,i)=>i+1).map(m=>{
-                const ph=phaseOf(m); const pc=phaseColor[ph];
-                return (
-                  <div key={m} style={{ width:COL_W, flexShrink:0, textAlign:"center", paddingBottom:8, borderBottom:`0.5px solid ${C.border}`, borderLeft:`0.5px solid ${C.border}`, backgroundColor:phaseBg[ph] }}>
-                    <div style={{ fontSize:12, fontWeight:700, color:pc }}>M{m}</div>
-                    <div style={{ fontSize:9.5, color:C.gray400, marginTop:1 }}>{phaseSub[ph]}</div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Role rows */}
-            {ROLES.map((r,ri) => (
-              <div key={r.abbr} style={{ display:"flex", alignItems:"center", height:ROW_H, position:"relative", borderBottom:`0.5px solid ${C.border}`, backgroundColor: ri%2===0?C.white:C.gray50 }}>
-                {/* Role label */}
-                <div style={{ width:LABEL_W, flexShrink:0, display:"flex", alignItems:"center", gap:10, height:"100%", paddingLeft:4 }}>
-                  <div style={{ width:30, height:30, borderRadius:7, backgroundColor:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:800, color:"#fff", flexShrink:0 }}>{r.abbr}</div>
-                  <span style={{ fontSize:12.5, fontWeight:600, color:C.gray800 }}>{r.role}</span>
-                </div>
-                {/* Dedicação */}
-                <div style={{ width:DED_W, flexShrink:0, height:"100%", display:"flex", flexDirection:"column", justifyContent:"center", paddingLeft:4 }}>
-                  <div style={{ fontSize:11.5, fontWeight:600, color:C.gray800 }}>{r.type}</div>
-                  <div style={{ fontSize:10.5, color:C.gray400, marginTop:2 }}>{r.range}</div>
-                </div>
-                {/* Grid cols */}
-                {Array.from({length:NM},(_,i)=>i+1).map(m=>(
-                  <div key={m} style={{ width:COL_W, flexShrink:0, height:"100%", borderLeft:`0.5px solid ${C.border}`, backgroundColor: ri%2===0?C.white:C.gray50 }}/>
-                ))}
-                {/* Bars (multi-support) */}
-                {r.bars.map((b,bi) => {
-                  const left = LABEL_W + DED_W + (b.ms[0]-1)*COL_W + 4;
-                  const w    = (b.ms[1]-b.ms[0]+1)*COL_W - 8;
-                  const barStyle = b.lite
-                    ? { ...hatch(r.color, b.opacity), borderRadius:6 }
-                    : { backgroundColor:r.color, opacity:b.opacity, borderRadius:6 };
-                  return (
-                    <div key={bi} style={{ position:"absolute", left, width:w, top:10, bottom:10, ...barStyle, display:"flex", alignItems:"center", justifyContent:"flex-end", paddingRight:9, overflow:"hidden" }}>
-                      <span style={{ fontSize:10, fontWeight:700, color: b.lite?r.color:"#fff", whiteSpace:"nowrap", opacity: w>60?1:0 }}>{b.label}</span>
-                    </div>
-                  );
-                })}
+      {/* Gantt */}
+      <div style={{ padding:"20px 24px", overflowX:"auto" }}>
+        <div style={{ minWidth: LABEL_W + DED_W + months.length * COL_W }}>
+          {/* Header */}
+          <div style={{ display:"flex" }}>
+            <div style={{ width:LABEL_W, flexShrink:0, fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", paddingBottom:8, borderBottom:`0.5px solid ${C.border}` }}>PAPEL</div>
+            <div style={{ width:DED_W, flexShrink:0, fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", paddingBottom:8, borderBottom:`0.5px solid ${C.border}` }}>DEDICAÇÃO</div>
+            {months.map(m => (
+              <div key={m} style={{ width:COL_W, flexShrink:0, textAlign:"center", paddingBottom:8, borderBottom:`2px solid ${phColor}`, borderLeft:`0.5px solid ${C.border}`, backgroundColor:`${phColor}08` }}>
+                <div style={{ fontSize:13, fontWeight:800, color:phColor }}>M{m}</div>
               </div>
             ))}
+          </div>
 
-            {/* Legend */}
-            <div style={{ display:"flex", alignItems:"center", gap:20, padding:"10px 0 16px", flexWrap:"wrap" }}>
-              <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                <div style={{ width:28, height:12, borderRadius:3, backgroundColor:C.gray700||"#374151" }}/>
-                <span style={{ fontSize:11, color:C.gray600 }}>Full time</span>
+          {/* Role rows */}
+          {data.roles.map((r, ri) => {
+            const left  = LABEL_W + DED_W + (r.ms[0] - months[0]) * COL_W + 4;
+            const width = (r.ms[1] - r.ms[0] + 1) * COL_W - 8;
+            const barStyle = isLite(r.abbr)
+              ? { ...hatch(r.color), borderRadius:6 }
+              : { backgroundColor:r.color, opacity:0.88, borderRadius:6 };
+            return (
+              <div key={r.abbr} style={{ display:"flex", alignItems:"center", height:ROW_H, position:"relative", borderBottom:`0.5px solid ${C.border}`, backgroundColor: ri%2===0?C.white:C.gray50 }}>
+                <div style={{ width:LABEL_W, flexShrink:0, display:"flex", alignItems:"center", gap:9, paddingLeft:4, height:"100%" }}>
+                  <div style={{ width:28, height:28, borderRadius:7, backgroundColor:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:9.5, fontWeight:800, color:"#fff", flexShrink:0 }}>{r.abbr}</div>
+                  <span style={{ fontSize:12, fontWeight:600, color:C.gray800 }}>{r.role}</span>
+                </div>
+                <div style={{ width:DED_W, flexShrink:0, height:"100%", display:"flex", alignItems:"center", paddingLeft:6 }}>
+                  <span style={{ fontSize:11, color:C.gray600 }}>{r.type}</span>
+                </div>
+                {months.map(m => (
+                  <div key={m} style={{ width:COL_W, flexShrink:0, height:"100%", borderLeft:`0.5px solid ${C.border}` }} />
+                ))}
+                <div style={{ position:"absolute", left, width, top:8, bottom:8, ...barStyle, display:"flex", alignItems:"center", paddingLeft:9, overflow:"hidden" }}>
+                  <span style={{ fontSize:10, fontWeight:700, color: isLite(r.abbr)?r.color:"#fff", whiteSpace:"nowrap", opacity: width>80?1:0 }}>{r.type.split(" ")[0]}</span>
+                </div>
               </div>
-              <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                <div style={{ width:28, height:12, borderRadius:3, background:"repeating-linear-gradient(45deg,#64748b,#64748b 3px,transparent 3px,transparent 7px)", border:"1.5px solid #64748b" }}/>
-                <span style={{ fontSize:11, color:C.gray600 }}>Part time</span>
-              </div>
-              <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                <div style={{ width:28, height:12, borderRadius:3, background:"repeating-linear-gradient(45deg,#94a3b8,#94a3b8 3px,transparent 3px,transparent 7px)", border:"1.5px solid #94a3b8" }}/>
-                <span style={{ fontSize:11, color:C.gray600 }}>20h / mês</span>
-              </div>
-              <span style={{ fontSize:11, color:C.gray400, marginLeft:4 }}>6 pessoas · M1–M15</span>
+            );
+          })}
+
+          {/* Legend */}
+          <div style={{ display:"flex", gap:20, padding:"10px 0 6px", flexWrap:"wrap" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:7 }}>
+              <div style={{ width:28, height:12, borderRadius:3, backgroundColor:"#374151" }}/>
+              <span style={{ fontSize:11, color:C.gray600 }}>Full-time · 160h/mês</span>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:7 }}>
+              <div style={{ width:28, height:12, borderRadius:3, background:"repeating-linear-gradient(45deg,#0E7490,#0E7490 3px,transparent 3px,transparent 7px)", border:"1.5px solid #0E7490" }}/>
+              <span style={{ fontSize:11, color:C.gray600 }}>Part-time · 80h/mês (Designer)</span>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:7 }}>
+              <div style={{ width:28, height:12, borderRadius:3, background:"repeating-linear-gradient(45deg,#BE185D,#BE185D 3px,transparent 3px,transparent 7px)", border:"1.5px solid #BE185D" }}/>
+              <span style={{ fontSize:11, color:C.gray600 }}>Part-time · 40h/mês (GP)</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Skills por papel ── */}
-      <div style={{ padding:"20px 24px 36px" }}>
-        <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:14 }}>Skills por Papel</div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:12, marginBottom:12 }}>
-          {ROLES.map(r => (
-            <div key={r.abbr} style={{ backgroundColor:C.white, border:`0.5px solid ${C.border}`, borderRadius:12, padding:"16px 18px" }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:10 }}>
-                <div style={{ width:32, height:32, borderRadius:8, backgroundColor:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, color:"#fff", flexShrink:0 }}>{r.abbr}</div>
+      {/* Skills */}
+      <div style={{ padding:"0 24px 36px" }}>
+        <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:12 }}>Responsabilidades por Papel</div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
+          {data.roles.map(r => (
+            <div key={r.abbr} style={{ backgroundColor:C.white, border:`0.5px solid ${C.border}`, borderRadius:12, padding:"14px 16px" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:9 }}>
+                <div style={{ width:30, height:30, borderRadius:8, backgroundColor:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:800, color:"#fff", flexShrink:0 }}>{r.abbr}</div>
                 <div>
                   <div style={{ fontSize:12.5, fontWeight:700, color:C.gray800 }}>{r.role}</div>
-                  <div style={{ fontSize:10, color:C.gray400, marginTop:1 }}>{r.hours}</div>
+                  <div style={{ fontSize:10, color:C.gray400 }}>{r.type}</div>
                 </div>
               </div>
-              <div style={{ fontSize:10.5, color:C.gray400, marginBottom:8, lineHeight:1.7 }}>{r.skills.join(" · ")}</div>
-              <div style={{ borderTop:`0.5px solid ${C.border}`, paddingTop:8, display:"flex", flexDirection:"column", gap:3 }}>
-                {r.resp.map(rp=>(
-                  <div key={rp} style={{ display:"flex", gap:7, alignItems:"flex-start" }}>
+              <div style={{ fontSize:10, color:C.gray400, marginBottom:7 }}>{r.skills.join(" · ")}</div>
+              <div style={{ borderTop:`0.5px solid ${C.border}`, paddingTop:7 }}>
+                {r.resp.map(rp => (
+                  <div key={rp} style={{ display:"flex", gap:7, alignItems:"flex-start", padding:"2px 0" }}>
                     <div style={{ width:4, height:4, borderRadius:"50%", backgroundColor:r.color, flexShrink:0, marginTop:5 }}/>
-                    <span style={{ fontSize:10.5, color:C.gray600, lineHeight:1.5 }}>{rp}</span>
+                    <span style={{ fontSize:11, color:C.gray600, lineHeight:1.5 }}>{rp}</span>
                   </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
-
-        {/* Estimativas totais */}
-        <div style={{ backgroundColor:C.white, border:`0.5px solid ${C.border}`, borderRadius:12, padding:"18px 20px" }}>
-          <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:14 }}>Estimativas por Sistema</div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginBottom:14 }}>
-            {horasTotal.map((h,i) => (
-              <div key={h.app} style={{ padding:"10px 12px", borderRadius:9, backgroundColor:C.gray50, border:`0.5px solid ${C.border}` }}>
-                <div style={{ display:"flex", alignItems:"center", gap:7, marginBottom:6 }}>
-                  <div style={{ width:9, height:9, borderRadius:2, backgroundColor:h.color, flexShrink:0 }}/>
-                  <span style={{ fontSize:11.5, fontWeight:600, color:C.gray800 }}>{h.app}</span>
-                </div>
-                <div style={{ height:3, backgroundColor:C.gray200, borderRadius:2, marginBottom:5 }}>
-                  <div style={{ height:"100%", backgroundColor:h.color, borderRadius:2, width:`${Math.min(100,(parseInt(h.h)/1370)*100)}%` }}/>
-                </div>
-                <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, color:C.gray400 }}>
-                  <span>Base: <strong style={{color:C.gray600}}>{h.h}</strong></span>
-                  <span>+25%: <strong style={{color:C.gray800}}>{h.hm}</strong></span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display:"flex", gap:14, padding:"12px 14px", borderRadius:10, backgroundColor:C.navy }}>
-            <div>
-              <div style={{ fontSize:9, color:"rgba(255,255,255,0.4)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:3 }}>Base total</div>
-              <div style={{ fontSize:18, fontWeight:800, color:C.white }}>5.570h</div>
-            </div>
-            <div style={{ width:0.5, backgroundColor:"rgba(255,255,255,0.12)", alignSelf:"stretch" }}/>
-            <div>
-              <div style={{ fontSize:9, color:"rgba(255,255,255,0.4)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:3 }}>Margem 25%</div>
-              <div style={{ fontSize:18, fontWeight:800, color:"rgba(255,255,255,0.6)" }}>+1.392h</div>
-            </div>
-            <div style={{ width:0.5, backgroundColor:"rgba(255,255,255,0.12)", alignSelf:"stretch" }}/>
-            <div>
-              <div style={{ fontSize:9, color:"rgba(255,255,255,0.4)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:3 }}>Total com margem</div>
-              <div style={{ fontSize:22, fontWeight:800, color:C.gold }}>6.962h</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 }
+
+function PageTeam() { return <PageTeamPhase phase="F1" />; }
+
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PHONE FRAME
@@ -1507,11 +1468,10 @@ function PagePrototypeMenfe() {
             {[
               { icon: "doc",      label: "Meus Contratos",       action: () => setScreen("contratos") },
               { icon: "calendar", label: "Agenda de Pagamentos", action: () => {} },
-              { icon: "chat",     label: "Chat com a Menfe",     action: () => setScreen("chat") },
               { icon: "bell",     label: "Notificações",         action: () => setScreen("notificacoes") },
-              { icon: "trending", label: "Log de Atividades",    action: () => setScreen("log") },
               { icon: "shield",   label: "Segurança e Acesso",   action: () => {} },
               { icon: "settings", label: "Configurações",        action: () => {} },
+              { icon: "chat",     label: "Ajuda",                action: () => {} },
             ].map((item, i, arr) => (
               <div key={item.label} onClick={item.action} style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: 12, borderBottom: i < arr.length - 1 ? `0.5px solid ${MA.border}` : "none", cursor: "pointer" }}>
                 <div style={{ width: 30, height: 30, borderRadius: 8, backgroundColor: MA.blueXL, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -1777,25 +1737,445 @@ const FD = "'Playfair Display','Georgia',serif";
 const FB = "'DM Sans','Segoe UI',sans-serif";
 
 const EMPREEN = [
-  { id:1, name:"Collegiate Uberaba 2",      city:"Uberaba",          state:"MG", tipo:"Studio · 24m²", preco:1800, status:"Lançamento",  rating:4.9, reviews:"2.4k", desc:"A 10 min das principais faculdades. Wi-Fi Giga, rooftop panorâmico e academia 24h.", tags:["Wi-Fi Giga","Rooftop","Academia","Coworking"], perfil:["universitario","jovem"], orcamento:"medio",    lifestyle:["social","fitness"],  gradient:"linear-gradient(160deg,#1A2E4A,#2A4A6A)", emoji:"🏙" },
-  { id:2, name:"Collegiate Varginha",        city:"Varginha",         state:"MG", tipo:"Studio · 28m²", preco:1600, status:"95% Vendido", rating:4.8, reviews:"1.8k", desc:"256 unidades modernas com coworking, academia e a perto de tudo na cidade.",           tags:["Coworking","Fitness","Central"],                perfil:["universitario","profissional"], orcamento:"acessivel", lifestyle:["trabalho","fitness"], gradient:"linear-gradient(160deg,#2D1A4A,#4A2D7A)", emoji:"🌿" },
-  { id:3, name:"Collegiate Plus São João del-Rei", city:"São João del-Rei", state:"MG", tipo:"1 Quarto · 38m²", preco:2200, status:"Em obras", rating:4.9, reviews:"3.1k", desc:"84 unidades com rooftop de alto nível, área gourmet e hidromassagem.",  tags:["Gourmet","Hidromassagem","Rooftop","Premium"],  perfil:["profissional","casal"],  orcamento:"premium",  lifestyle:["social","gourmet"],  gradient:"linear-gradient(160deg,#1A3A2E,#2D5A46)", emoji:"✨" },
-  { id:4, name:"Collegiate ONE Barbacena",   city:"Barbacena",        state:"MG", tipo:"Studio · 22m²", preco:1500, status:"100% Vendido",rating:4.7, reviews:"2.9k", desc:"160 apts compactos próximos à Faculdade de Medicina e ao Bahamas Shopping.",           tags:["Medicina","Academia","Coworking"],              perfil:["universitario"],        orcamento:"acessivel", lifestyle:["estudo","fitness"],  gradient:"linear-gradient(160deg,#3A1A1A,#6A2A2A)", emoji:"🏥" },
-  { id:5, name:"Collegiate Barbacena",       city:"Barbacena",        state:"MG", tipo:"Studio · 32m²", preco:1900, status:"Entregue",    rating:4.9, reviews:"4.2k", desc:"204 unidades próximas à Faculdade de Medicina com áreas compartilhadas.",                tags:["Compartilhado","Comercial","Moderno"],          perfil:["universitario","profissional"], orcamento:"medio", lifestyle:["social","estudo"],   gradient:"linear-gradient(160deg,#1A2A1A,#2A4A2A)", emoji:"🌳" },
+  { id:1, name:"Collegiate Uberaba 2",      city:"Uberaba",          state:"MG", tipo:"Studio · 24m²", preco:1800, status:"Lançamento",  rating:4.9, reviews:"2.4k", desc:"Localização privilegiada no centro da cidade. Wi-Fi Giga, rooftop panorâmico e academia 24h. Ideal para estadias de curta ou média duração.", tags:["Wi-Fi Giga","Rooftop","Academia","Coworking"], perfil:["executivo","viajante"], orcamento:"medio",    lifestyle:["social","fitness"],  gradient:"linear-gradient(160deg,#1A2E4A,#2A4A6A)", emoji:"🏙" },
+  { id:2, name:"Collegiate Varginha",        city:"Varginha",         state:"MG", tipo:"Studio · 28m²", preco:1600, status:"95% Vendido", rating:4.8, reviews:"1.8k", desc:"256 unidades modernas com coworking, academia e localização central. Perfeito para quem busca flexibilidade e conforto.", tags:["Coworking","Fitness","Central"],                perfil:["executivo","viajante"],  orcamento:"acessivel", lifestyle:["trabalho","fitness"], gradient:"linear-gradient(160deg,#2D1A4A,#4A2D7A)", emoji:"🌿" },
+  { id:3, name:"Collegiate Plus São João del-Rei", city:"São João del-Rei", state:"MG", tipo:"1 Quarto · 38m²", preco:2200, status:"Em obras", rating:4.9, reviews:"3.1k", desc:"84 unidades premium com rooftop de alto nível, área gourmet e hidromassagem. Experiência de hospedagem sofisticada.", tags:["Gourmet","Hidromassagem","Rooftop","Premium"],  perfil:["premium","casal"],  orcamento:"premium",  lifestyle:["social","gourmet"],  gradient:"linear-gradient(160deg,#1A3A2E,#2D5A46)", emoji:"✨" },
+  { id:4, name:"Collegiate ONE Barbacena",   city:"Barbacena",        state:"MG", tipo:"Studio · 22m²", preco:1500, status:"100% Vendido",rating:4.7, reviews:"2.9k", desc:"160 apartamentos compactos com ótima localização, próximos ao centro comercial. Solução prática e bem-localizada.", tags:["Localização","Academia","Coworking"],              perfil:["executivo","viajante"],        orcamento:"acessivel", lifestyle:["trabalho","fitness"],  gradient:"linear-gradient(160deg,#3A1A1A,#6A2A2A)", emoji:"🏥" },
+  { id:5, name:"Collegiate Barbacena",       city:"Barbacena",        state:"MG", tipo:"Studio · 32m²", preco:1900, status:"Entregue",    rating:4.9, reviews:"4.2k", desc:"204 unidades com áreas compartilhadas modernas. Conforto e praticidade para estadias flexíveis.", tags:["Compartilhado","Moderno","Flexível"],          perfil:["executivo","viajante"], orcamento:"medio", lifestyle:["social","trabalho"],   gradient:"linear-gradient(160deg,#1A2A1A,#2A4A2A)", emoji:"🌳" },
 ];
 
 const STEPS_A = [
-  { id:"perfil",  pergunta:"Qual é o seu perfil?",             sub:"Isso nos ajuda a entender suas necessidades",          icon:"👋", tipo:"opcoes", opcoes:[{label:"Estudante universitário",value:"universitario",icon:"🎓"},{label:"Jovem profissional",value:"jovem",icon:"💼"},{label:"Profissional consolidado",value:"profissional",icon:"🏆"},{label:"Casal / família",value:"casal",icon:"💑"}] },
+  { id:"perfil",  pergunta:"Qual é o seu perfil?",             sub:"Isso nos ajuda a entender suas necessidades",          icon:"👋", tipo:"opcoes", opcoes:[{label:"Executivo / Negócios",value:"executivo",icon:"💼"},{label:"Viajante frequente",value:"viajante",icon:"✈️"},{label:"Nômade digital",value:"nomade",icon:"💻"},{label:"Casal / família",value:"casal",icon:"💑"}] },
   { id:"cidade",  pergunta:"Qual região te interessa?",        sub:"Temos empreendimentos em cidades estratégicas de MG",  icon:"📍", tipo:"opcoes", opcoes:[{label:"Triângulo Mineiro",value:"triangulo",icon:"🌄"},{label:"Sul de Minas",value:"sul",icon:"🌿"},{label:"Campo das Vertentes",value:"vertentes",icon:"🏘"},{label:"Indiferente",value:"qualquer",icon:"🗺"}] },
-  { id:"orcamento",pergunta:"Qual é o seu orçamento mensal?",  sub:"Valores incluem aluguel e condomínio",                 icon:"💰", tipo:"opcoes", opcoes:[{label:"Até R$ 1.600",value:"acessivel",icon:"✅"},{label:"R$ 1.600 – R$ 2.000",value:"medio",icon:"⭐"},{label:"R$ 2.000 – R$ 2.500",value:"premium",icon:"💎"},{label:"Acima de R$ 2.500",value:"luxo",icon:"👑"}] },
-  { id:"lifestyle",pergunta:"O que você prioriza na moradia?", sub:"Selecione até 2 opções que mais combinam com você",    icon:"🌟", tipo:"multi", max:2, opcoes:[{label:"Vida social",value:"social",icon:"🥂"},{label:"Foco em estudos",value:"estudo",icon:"📚"},{label:"Fitness e saúde",value:"fitness",icon:"🏋️"},{label:"Trabalho remoto",value:"trabalho",icon:"💻"},{label:"Gastronomia",value:"gourmet",icon:"🍽"},{label:"Tranquilidade",value:"calmo",icon:"🧘"}] },
-  { id:"prazo",   pergunta:"Quando pretende se mudar?",        sub:"Define quais empreendimentos estão disponíveis",       icon:"📅", tipo:"opcoes", opcoes:[{label:"Imediatamente",value:"agora",icon:"⚡"},{label:"Em até 3 meses",value:"3meses",icon:"📆"},{label:"Em até 6 meses",value:"6meses",icon:"🗓"},{label:"Ainda avaliando",value:"avaliando",icon:"🤔"}] },
+  { id:"orcamento",pergunta:"Qual é o seu orçamento mensal?",  sub:"Valores incluem hospedagem e serviços",                icon:"💰", tipo:"opcoes", opcoes:[{label:"Até R$ 1.600",value:"acessivel",icon:"✅"},{label:"R$ 1.600 – R$ 2.000",value:"medio",icon:"⭐"},{label:"R$ 2.000 – R$ 2.500",value:"premium",icon:"💎"},{label:"Acima de R$ 2.500",value:"luxo",icon:"👑"}] },
+  { id:"lifestyle",pergunta:"O que você prioriza na hospedagem?", sub:"Selecione até 2 opções que mais combinam com você", icon:"🌟", tipo:"multi", max:2, opcoes:[{label:"Vida social",value:"social",icon:"🥂"},{label:"Foco no trabalho",value:"trabalho",icon:"💻"},{label:"Fitness e saúde",value:"fitness",icon:"🏋️"},{label:"Coworking",value:"cowork",icon:"🖥"},{label:"Gastronomia",value:"gourmet",icon:"🍽"},{label:"Tranquilidade",value:"calmo",icon:"🧘"}] },
+  { id:"prazo",   pergunta:"Quando pretende se hospedar?",     sub:"Define quais empreendimentos estão disponíveis",       icon:"📅", tipo:"opcoes", opcoes:[{label:"Imediatamente",value:"agora",icon:"⚡"},{label:"Em até 1 mês",value:"1mes",icon:"📆"},{label:"Em até 3 meses",value:"3meses",icon:"🗓"},{label:"Ainda avaliando",value:"avaliando",icon:"🤔"}] },
 ];
 
 function CBlob({colors,style}){return <div style={{position:"absolute",borderRadius:"50%",filter:"blur(40px)",opacity:0.35,pointerEvents:"none",...style,background:`radial-gradient(ellipse,${colors[0]},${colors[1]})`}}/>;}
 function CTag({children,active,onClick}){return <div onClick={onClick} style={{padding:"6px 14px",borderRadius:20,fontSize:11.5,fontWeight:600,whiteSpace:"nowrap",cursor:onClick?"pointer":"default",backgroundColor:active?T.orange:"#fff",color:active?"#fff":T.textM,border:`1.5px solid ${active?T.orange:T.tborder}`,transition:"all 0.18s",boxShadow:active?`0 4px 12px ${T.orange}44`:"none",fontFamily:FB}}>{children}</div>;}
 function CStars({n=5}){return <span style={{color:"#F59E0B",fontSize:10}}>{"★".repeat(Math.round(n))}{"☆".repeat(5-Math.round(n))}</span>;}
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PAGE: APP DO INQUILINO · FASE 2 — ÁREA LOGADA
+// ═══════════════════════════════════════════════════════════════════════════════
+function PagePrototypeLeadsApp() {
+  const [appPhase, setAppPhase] = useState("splash");
+  const [screen, setScreen]     = useState("vitrine");
+  const [astStep, setAstStep]   = useState(-1);
+  const [astRes, setAstRes]     = useState({});
+  const [astResult, setAstResult] = useState(null);
+  const [astAnim, setAstAnim]   = useState(true);
+
+  function astAvancar(id, valor){
+    const novas={...astRes,[id]:valor};
+    setAstRes(novas);
+    if(astStep<STEPS_A.length-1){
+      setAstAnim(false);
+      setTimeout(()=>{setAstStep(s=>s+1);setAstAnim(true);},200);
+    } else {
+      const matches=EMPREEN.map(em=>{
+        let score=0;
+        if(novas.perfil&&em.perfil.includes(novas.perfil)) score+=3;
+        if(novas.orcamento===em.orcamento) score+=3;
+        const ls=Array.isArray(novas.lifestyle)?novas.lifestyle:[novas.lifestyle].filter(Boolean);
+        ls.forEach(l=>{if(em.lifestyle.includes(l)) score+=2;});
+        return {...em,score};
+      }).sort((a,b)=>b.score-a.score);
+      setAstResult(matches.slice(0,3));
+    }
+  }
+  function astToggleMulti(id,valor){
+    const atual=Array.isArray(astRes[id])?astRes[id]:[];
+    const sd=STEPS_A[astStep];
+    if(atual.includes(valor)){setAstRes(r=>({...r,[id]:atual.filter(v=>v!==valor)}));}
+    else if(atual.length<(sd.max||99)){
+      const novo=[...atual,valor];
+      setAstRes(r=>({...r,[id]:novo}));
+      if(novo.length===sd.max) setTimeout(()=>astAvancar(id,novo),300);
+    }
+  }
+  function astReset(){setAstStep(-1);setAstRes({});setAstResult(null);}
+
+  function SBar(){
+    return(
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 18px 4px",flexShrink:0}}>
+        <span style={{fontSize:11,fontWeight:700,color:T.text,fontFamily:FB}}>9:41</span>
+        <div style={{width:80,height:22,backgroundColor:"rgba(0,0,0,0.9)",borderRadius:12}}/>
+        <span style={{fontSize:9,color:T.text,fontFamily:FB}}>●●● 67</span>
+      </div>
+    );
+  }
+
+  function NavBar(){
+    const tabs=[{k:"vitrine",icon:"⌂",label:"Início"},{k:"assistente",icon:"✦",label:"Buscar lar"},{k:"explorar",icon:"◎",label:"Explorar"},{k:"entrar",icon:"○",label:"Entrar"}];
+    return(
+      <div style={{flexShrink:0,padding:"8px 10px 14px",background:T.dark,display:"flex",gap:4}}>
+        <div style={{flex:1,display:"flex",backgroundColor:"rgba(255,255,255,0.07)",borderRadius:22,padding:"4px"}}>
+          {tabs.map(t=>{
+            const a=screen===t.k;
+            return(
+              <div key={t.k} onClick={()=>setScreen(t.k)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,cursor:"pointer",padding:"6px 4px",borderRadius:18,backgroundColor:a?T.orange:"transparent",transition:"all 0.2s"}}>
+                <span style={{fontSize:15,color:a?"#fff":"rgba(255,255,255,0.4)",lineHeight:1}}>{t.icon}</span>
+                <span style={{fontSize:8.5,fontWeight:a?700:500,color:a?"#fff":"rgba(255,255,255,0.3)",fontFamily:FB}}>{t.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  function SplashScreen(){
+    return(
+      <div style={{flex:1,display:"flex",flexDirection:"column",position:"relative",overflow:"hidden",background:"linear-gradient(160deg,#0D2A1A,#1A3A2A,#2A1A0A)"}}>
+        <CBlob colors={[T.orange,T.orangeD]} style={{width:280,height:280,top:-80,right:-80,opacity:0.2}}/>
+        <CBlob colors={["#1E4E9C","#0A2A5C"]} style={{width:220,height:220,bottom:100,left:-60,opacity:0.2}}/>
+        <SBar/>
+        <div style={{position:"relative",flex:1,display:"flex",flexDirection:"column",justifyContent:"flex-end",padding:"0 26px 44px"}}>
+          <div style={{position:"absolute",top:10,left:26,display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:30,height:30,borderRadius:9,background:T.orange,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:"#fff",fontFamily:FB}}>C</div>
+            <span style={{fontSize:14,fontWeight:700,color:"#fff",fontFamily:FB}}>collegiate.</span>
+          </div>
+          <div style={{fontSize:32,fontWeight:800,color:"#fff",fontFamily:FD,lineHeight:1.15,marginBottom:12,letterSpacing:"-0.5px"}}>
+            Descubra onde<br/><span style={{color:T.orangeM}}>você quer morar.</span>
+          </div>
+          <div style={{fontSize:12.5,color:"rgba(255,255,255,0.5)",lineHeight:1.7,marginBottom:30,fontFamily:FB}}>
+            Explore empreendimentos, encontre a acomodação ideal e viva a experiência Collegiate.
+          </div>
+          <div onClick={()=>setAppPhase("app")} style={{background:T.orange,borderRadius:16,padding:"15px",textAlign:"center",fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 8px 32px ${T.orange}66`,marginBottom:10}}>
+            Explorar empreendimentos →
+          </div>
+          <div style={{textAlign:"center",fontSize:11.5,color:"rgba(255,255,255,0.3)",fontFamily:FB}}>
+            Já tem reserva? <span style={{color:T.orangeM,fontWeight:600,cursor:"pointer"}} onClick={()=>{setAppPhase("app");setScreen("entrar");}}>Entrar na conta</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function VitrineScreen(){
+    const [catAtiva,setCatAtiva]=useState("Todos");
+    const [det,setDet]=useState(null);
+    const cats=["Todos","Disponível","Em obras"];
+    const filtrados=catAtiva==="Todos"?EMPREEN:catAtiva==="Disponível"?EMPREEN.filter(e=>e.status==="Entregue"||e.status==="Lançamento"):EMPREEN.filter(e=>e.status.includes("obras"));
+
+    if(det!==null){
+      const em=EMPREEN.find(e=>e.id===det);
+      return(
+        <div style={{flex:1,overflowY:"auto",backgroundColor:"#fff"}}>
+          <div style={{height:230,background:em.gradient,position:"relative"}}>
+            <SBar/>
+            <div style={{position:"absolute",inset:0,background:"linear-gradient(0deg,rgba(26,14,6,0.8) 0%,transparent 55%)"}}/>
+            <div style={{position:"absolute",top:52,left:14}}>
+              <div onClick={()=>setDet(null)} style={{width:34,height:34,borderRadius:10,backgroundColor:"rgba(255,255,255,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,color:"#fff",cursor:"pointer"}}>←</div>
+            </div>
+            <div style={{position:"absolute",bottom:16,left:18,right:18}}>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",fontFamily:FB,marginBottom:4}}>{em.emoji} {em.city.toUpperCase()}, {em.state}</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#fff",fontFamily:FD,lineHeight:1.2,letterSpacing:"-0.3px"}}>{em.name}</div>
+              <div style={{display:"flex",alignItems:"center",gap:6,marginTop:4}}>
+                <CStars n={em.rating}/>
+                <span style={{fontSize:11,color:"rgba(255,255,255,0.6)",fontFamily:FB}}>{em.rating} ({em.reviews})</span>
+              </div>
+            </div>
+          </div>
+          <div style={{padding:"16px 18px"}}>
+            <div style={{backgroundColor:T.orangeL,borderRadius:14,padding:"12px 16px",marginBottom:14}}>
+              <div style={{fontSize:11,color:T.textL,fontFamily:FB,marginBottom:2}}>A partir de</div>
+              <div style={{fontSize:22,fontWeight:800,color:T.orange,fontFamily:FD}}>R$ {em.preco.toLocaleString()}<span style={{fontSize:12,color:T.textL}}>/mês</span></div>
+            </div>
+            <div style={{fontSize:13,color:T.textM,lineHeight:1.75,fontFamily:FB,marginBottom:14}}>{em.desc}</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:16}}>
+              {["🛏 Mobiliado","📶 Wi-Fi Giga","🏋️ Academia 24h","💼 Coworking","🧺 Lavanderia"].map(a=>(
+                <div key={a} style={{display:"flex",alignItems:"center",gap:7,backgroundColor:T.sand,borderRadius:10,padding:"9px 11px"}}>
+                  <span style={{fontSize:14}}>{a.split(" ")[0]}</span>
+                  <span style={{fontSize:11,color:T.textM,fontWeight:600,fontFamily:FB}}>{a.split(" ").slice(1).join(" ")}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:18}}>
+              {em.tags.map(tg=><span key={tg} style={{backgroundColor:T.orangeL,color:T.orangeD,borderRadius:7,padding:"4px 10px",fontSize:11,fontWeight:700,fontFamily:FB}}>{tg}</span>)}
+            </div>
+          </div>
+          <div style={{position:"sticky",bottom:0,backgroundColor:"#fff",padding:"12px 18px 18px",borderTop:`1px solid ${T.tborder}`,display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 -8px 28px rgba(26,14,6,0.07)"}}>
+            <div>
+              <div style={{fontSize:11,color:T.textL,fontFamily:FB}}>A partir de</div>
+              <div style={{fontSize:20,fontWeight:800,color:T.orange,fontFamily:FD}}>R$ {em.preco.toLocaleString()}<span style={{fontSize:11,color:T.textL}}>/mês</span></div>
+            </div>
+            <div onClick={()=>setScreen("entrar")} style={{backgroundColor:T.orange,borderRadius:14,padding:"13px 22px",fontSize:13,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 8px 24px ${T.orange}55`}}>Quero morar aqui →</div>
+          </div>
+        </div>
+      );
+    }
+
+    return(
+      <div style={{flex:1,overflowY:"auto",backgroundColor:T.cream}}>
+        <div style={{background:T.dark,padding:"0 18px 18px",position:"relative",overflow:"hidden"}}>
+          <SBar/>
+          <CBlob colors={[T.orange,T.orangeD]} style={{width:180,height:180,top:-70,right:-50,opacity:0.2}}/>
+          <div style={{position:"relative"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
+              <div>
+                <div style={{fontSize:10.5,color:"rgba(255,255,255,0.4)",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:4}}>Encontre seu lar</div>
+                <div style={{fontSize:20,fontWeight:800,color:"#fff",fontFamily:FD,lineHeight:1.2,letterSpacing:"-0.3px"}}>Explore o<br/><span style={{color:T.orangeM}}>Collegiate</span></div>
+              </div>
+              <div style={{backgroundColor:"rgba(255,255,255,0.08)",borderRadius:12,padding:"8px 12px",textAlign:"center",border:"1px solid rgba(255,255,255,0.1)"}}>
+                <div style={{fontSize:18}}>☀️</div>
+                <div style={{fontSize:9.5,color:"rgba(255,255,255,0.6)",fontWeight:700,fontFamily:FB}}>26°C</div>
+              </div>
+            </div>
+            <div style={{backgroundColor:"rgba(255,255,255,0.09)",borderRadius:12,padding:"11px 14px",display:"flex",alignItems:"center",gap:8,border:"1px solid rgba(255,255,255,0.08)"}}>
+              <span style={{fontSize:14,opacity:0.5}}>🔍</span>
+              <span style={{fontSize:12,color:"rgba(255,255,255,0.35)",fontFamily:FB}}>Buscar por cidade ou empreendimento…</span>
+            </div>
+          </div>
+        </div>
+        <div style={{padding:"12px 18px 0",display:"flex",gap:7,overflowX:"auto"}}>
+          {cats.map(c=><CTag key={c} active={catAtiva===c} onClick={()=>setCatAtiva(c)}>{c}</CTag>)}
+        </div>
+        <div style={{padding:"14px 18px 0"}}>
+          <div onClick={()=>setDet(1)} style={{borderRadius:22,overflow:"hidden",cursor:"pointer",boxShadow:"0 16px 48px rgba(26,14,6,0.15)"}}>
+            <div style={{height:200,background:EMPREEN[0].gradient,position:"relative",display:"flex",alignItems:"flex-end",padding:"12px 16px"}}>
+              <div style={{position:"absolute",inset:0,background:"linear-gradient(0deg,rgba(26,14,6,0.75) 0%,transparent 55%)"}}/>
+              <div style={{position:"absolute",top:12,left:14}}><span style={{backgroundColor:T.orange,borderRadius:7,padding:"4px 10px",fontSize:9.5,fontWeight:700,color:"#fff",fontFamily:FB}}>✦ LANÇAMENTO</span></div>
+              <div style={{position:"absolute",top:12,right:14}}>
+                <div style={{backgroundColor:"rgba(255,255,255,0.15)",borderRadius:9,padding:"4px 9px",display:"flex",alignItems:"center",gap:4,backdropFilter:"blur(8px)"}}>
+                  <span style={{fontSize:10}}>⭐</span><span style={{fontSize:11,fontWeight:700,color:"#fff",fontFamily:FB}}>{EMPREEN[0].reviews}</span>
+                </div>
+              </div>
+              <div style={{position:"relative"}}>
+                <div style={{fontSize:20,fontWeight:800,color:"#fff",fontFamily:FD,lineHeight:1.2}}>{EMPREEN[0].name}</div>
+                <div style={{fontSize:11.5,color:"rgba(255,255,255,0.65)",fontFamily:FB,marginTop:2}}>📍 {EMPREEN[0].city}, {EMPREEN[0].state} · {EMPREEN[0].tipo}</div>
+              </div>
+            </div>
+            <div style={{backgroundColor:"#fff",padding:"13px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <div>
+                <div style={{fontSize:11,color:T.textL,fontFamily:FB}}>A partir de</div>
+                <div style={{fontSize:19,fontWeight:800,color:T.orange,fontFamily:FD}}>R$ {EMPREEN[0].preco.toLocaleString()}<span style={{fontSize:11,color:T.textL}}>/mês</span></div>
+              </div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4,maxWidth:150}}>
+                {EMPREEN[0].tags.slice(0,3).map(tg=><span key={tg} style={{fontSize:9.5,backgroundColor:T.orangeL,color:T.orangeD,padding:"3px 7px",borderRadius:5,fontWeight:600,fontFamily:FB}}>{tg}</span>)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={{padding:"16px 18px 0"}}>
+          <div style={{fontSize:10.5,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",fontFamily:FB,marginBottom:10}}>Todos os empreendimentos</div>
+          {filtrados.map(em=>(
+            <div key={em.id} onClick={()=>setDet(em.id)} style={{backgroundColor:"#fff",borderRadius:18,marginBottom:11,overflow:"hidden",cursor:"pointer",boxShadow:"0 4px 18px rgba(26,14,6,0.07)",border:`1px solid ${T.tborder}`}}>
+              <div style={{height:72,background:em.gradient,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
+                <span style={{fontSize:28}}>{em.emoji}</span>
+                <div style={{position:"absolute",top:9,right:10}}>
+                  <span style={{backgroundColor:em.status==="Lançamento"?T.orange:em.status.includes("100%")?"#777":T.dark,borderRadius:6,padding:"3px 8px",fontSize:9,fontWeight:700,color:"#fff",fontFamily:FB}}>{em.status}</span>
+                </div>
+              </div>
+              <div style={{padding:"11px 14px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:3}}>
+                  <div style={{fontSize:13.5,fontWeight:700,color:T.text,fontFamily:FD}}>{em.name}</div>
+                  <div style={{backgroundColor:T.orangeL,borderRadius:7,padding:"3px 7px",display:"flex",alignItems:"center",gap:2}}>
+                    <span style={{fontSize:9}}>⭐</span><span style={{fontSize:10.5,fontWeight:700,color:T.orangeD,fontFamily:FB}}>{em.rating}</span>
+                  </div>
+                </div>
+                <div style={{fontSize:11,color:T.textL,fontFamily:FB,marginBottom:7}}>📍 {em.city}, {em.state} · {em.tipo}</div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <div style={{fontSize:15,fontWeight:800,color:T.orange,fontFamily:FD}}>R$ {em.preco.toLocaleString()}<span style={{fontSize:10,fontWeight:500,color:T.textL}}>/mês</span></div>
+                  <div style={{display:"flex",gap:4}}>
+                    {em.tags.slice(0,2).map(tg=><span key={tg} style={{fontSize:9.5,backgroundColor:T.sand,color:T.textM,padding:"3px 7px",borderRadius:5,fontWeight:600,fontFamily:FB}}>{tg}</span>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div onClick={()=>setScreen("assistente")} style={{background:T.dark,borderRadius:20,padding:"18px 20px",marginBottom:22,cursor:"pointer",position:"relative",overflow:"hidden"}}>
+            <CBlob colors={[T.orange,T.orangeD]} style={{width:140,height:140,top:-40,right:-30,opacity:0.3}}/>
+            <div style={{position:"relative"}}>
+              <div style={{fontSize:10.5,color:T.orangeM,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>✦ Assistente Collegiate</div>
+              <div style={{fontSize:16,fontWeight:800,color:"#fff",fontFamily:FD,marginBottom:5,lineHeight:1.3}}>Não sabe por onde começar?</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,0.5)",fontFamily:FB,marginBottom:13,lineHeight:1.6}}>Responda 5 perguntas e deixe o Collegiate encontrar a acomodação perfeita para você.</div>
+              <div style={{backgroundColor:T.orange,borderRadius:10,padding:"9px 16px",display:"inline-block",fontSize:12,fontWeight:700,color:"#fff",fontFamily:FB}}>Encontrar meu lar →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function AssistenteScreen(){
+    const stepData=STEPS_A[astStep];
+    const progress=astStep<0?0:((astStep+1)/STEPS_A.length)*100;
+    if(astResult){
+      return(
+        <div style={{flex:1,overflowY:"auto",backgroundColor:T.cream,padding:"0 18px 24px"}}>
+          <SBar/>
+          <div style={{marginBottom:16}}>
+            <div style={{fontSize:10.5,color:T.orange,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>✦ Resultado personalizado</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:3}}>Encontramos {astResult.length} opções para você</div>
+            <div style={{fontSize:12,color:T.textL,fontFamily:FB}}>Baseado no seu perfil e preferências</div>
+          </div>
+          {astResult.map((em,i)=>(
+            <div key={em.id} style={{backgroundColor:"#fff",borderRadius:18,marginBottom:11,overflow:"hidden",boxShadow:i===0?"0 8px 28px rgba(26,14,6,0.12)":"0 4px 14px rgba(26,14,6,0.06)",border:i===0?`2px solid ${T.orange}`:`1px solid ${T.tborder}`}}>
+              <div style={{height:90,background:em.gradient,position:"relative",display:"flex",alignItems:"flex-end",padding:"10px 14px"}}>
+                <div style={{position:"absolute",inset:0,background:"linear-gradient(0deg,rgba(26,14,6,0.7) 0%,transparent 50%)"}}/>
+                {i===0&&<div style={{position:"absolute",top:10,left:12}}><span style={{backgroundColor:T.orange,borderRadius:6,padding:"3px 9px",fontSize:9,fontWeight:700,color:"#fff",fontFamily:FB}}>✦ Melhor escolha</span></div>}
+                <div style={{position:"relative"}}>
+                  <div style={{fontSize:14,fontWeight:800,color:"#fff",fontFamily:FD}}>{em.name}</div>
+                  <div style={{fontSize:10.5,color:"rgba(255,255,255,0.6)",fontFamily:FB}}>📍 {em.city}, {em.state}</div>
+                </div>
+              </div>
+              <div style={{padding:"11px 14px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div style={{fontSize:15,fontWeight:800,color:T.orange,fontFamily:FD}}>R$ {em.preco.toLocaleString()}<span style={{fontSize:10,fontWeight:500,color:T.textL}}>/mês</span></div>
+                <div style={{backgroundColor:T.orange,borderRadius:9,padding:"7px 14px",fontSize:11,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB}}>Ver detalhes →</div>
+              </div>
+            </div>
+          ))}
+          <div onClick={astReset} style={{marginTop:8,border:`1.5px solid ${T.tborder}`,borderRadius:14,padding:"12px",textAlign:"center",fontSize:12,fontWeight:700,color:T.textM,cursor:"pointer",fontFamily:FB}}>Refazer busca</div>
+        </div>
+      );
+    }
+    if(astStep<0){
+      return(
+        <div style={{flex:1,overflowY:"auto",backgroundColor:T.cream}}>
+          <div style={{background:T.dark,padding:"0 18px 22px",position:"relative",overflow:"hidden"}}>
+            <CBlob colors={[T.orange,T.orangeD]} style={{width:180,height:180,top:-70,right:-50,opacity:0.25}}/>
+            <SBar/>
+            <div style={{position:"relative"}}>
+              <div style={{fontSize:10.5,color:T.orangeM,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:6}}>✦ Assistente Collegiate</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#fff",fontFamily:FD,lineHeight:1.2,marginBottom:5,letterSpacing:"-0.3px"}}>Vamos encontrar<br/>seu lar ideal</div>
+            </div>
+          </div>
+          <div style={{padding:"16px 18px"}}>
+            <div style={{fontSize:13,color:T.textM,lineHeight:1.75,fontFamily:FB,marginBottom:26}}>Responda 5 perguntas rápidas e eu vou encontrar a acomodação Collegiate perfeita para o seu perfil, orçamento e estilo de vida.</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:7,marginBottom:24}}>
+              {["Executivo/Negócios","Nômade digital","Até R$ 2.000/mês","Sul de Minas"].map(s=>(
+                <div key={s} style={{backgroundColor:"#fff",borderRadius:20,padding:"6px 13px",fontSize:11.5,fontWeight:600,color:T.textM,cursor:"pointer",border:`1.5px solid ${T.tborder}`,fontFamily:FB}}>{s}</div>
+              ))}
+            </div>
+            <div onClick={()=>{setAstStep(0);setAstAnim(true);}} style={{background:T.orange,borderRadius:16,padding:"15px",textAlign:"center",fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 10px 32px ${T.orange}55`}}>Começar agora ✦</div>
+          </div>
+        </div>
+      );
+    }
+    const isMulti=stepData.tipo==="multi";
+    const selecionados=isMulti?(Array.isArray(astRes[stepData.id])?astRes[stepData.id]:[]):astRes[stepData.id];
+    return(
+      <div style={{flex:1,display:"flex",flexDirection:"column",backgroundColor:T.cream,overflow:"hidden"}}>
+        <SBar/>
+        <div style={{padding:"0 18px 12px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7}}>
+            <div onClick={()=>setAstStep(s=>Math.max(-1,s-1))} style={{fontSize:11.5,color:T.textL,cursor:"pointer",fontFamily:FB,fontWeight:600}}>← Voltar</div>
+            <div style={{fontSize:11.5,color:T.textL,fontFamily:FB,fontWeight:600}}>{astStep+1} de {STEPS_A.length}</div>
+          </div>
+          <div style={{height:4,backgroundColor:T.sandM,borderRadius:2,overflow:"hidden"}}>
+            <div style={{width:`${progress}%`,height:"100%",background:T.orange,borderRadius:2,transition:"width 0.4s ease"}}/>
+          </div>
+        </div>
+        <div style={{flex:1,overflowY:"auto",padding:"4px 18px 24px",opacity:astAnim?1:0,transform:`translateY(${astAnim?0:12}px)`,transition:"all 0.2s ease"}}>
+          <div style={{marginBottom:22}}>
+            <div style={{fontSize:26,marginBottom:10}}>{stepData.icon}</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.text,fontFamily:FD,lineHeight:1.25,marginBottom:5,letterSpacing:"-0.3px"}}>{stepData.pergunta}</div>
+            <div style={{fontSize:12.5,color:T.textL,fontFamily:FB,lineHeight:1.6}}>{stepData.sub}{isMulti?` (máx. ${stepData.max})`:""}</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:9}}>
+            {stepData.opcoes.map(op=>{
+              const sel=isMulti?selecionados.includes(op.value):selecionados===op.value;
+              return(
+                <div key={op.value} onClick={()=>isMulti?astToggleMulti(stepData.id,op.value):astAvancar(stepData.id,op.value)} style={{backgroundColor:sel?T.dark:"#fff",borderRadius:16,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,cursor:"pointer",transition:"all 0.18s",border:`2px solid ${sel?T.orange:T.tborder}`,boxShadow:sel?`0 6px 22px ${T.orange}33`:"0 2px 8px rgba(26,14,6,0.05)"}}>
+                  <div style={{width:40,height:40,borderRadius:12,flexShrink:0,background:sel?T.orange:T.sand,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,transition:"all 0.18s"}}>{op.icon}</div>
+                  <span style={{fontSize:13.5,fontWeight:600,fontFamily:FB,color:sel?"#fff":T.text}}>{op.label}</span>
+                  {sel&&<div style={{marginLeft:"auto",width:20,height:20,borderRadius:"50%",backgroundColor:T.orange,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,color:"#fff",fontWeight:800}}>✓</span></div>}
+                </div>
+              );
+            })}
+          </div>
+          {isMulti&&selecionados.length>0&&selecionados.length<stepData.max&&(
+            <div onClick={()=>astAvancar(stepData.id,selecionados)} style={{marginTop:14,backgroundColor:T.orange,borderRadius:14,padding:"13px",textAlign:"center",fontSize:13,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB}}>Continuar →</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  function EntrarScreen(){
+    return(
+      <div style={{flex:1,display:"flex",flexDirection:"column",backgroundColor:T.cream}}>
+        <SBar/>
+        <div style={{flex:1,display:"flex",flexDirection:"column",justifyContent:"center",padding:"20px 26px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:28}}>
+            <div style={{width:38,height:38,borderRadius:12,background:T.orange,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800,color:"#fff",fontFamily:FB}}>C</div>
+            <div>
+              <div style={{fontSize:16,fontWeight:800,color:T.text,fontFamily:FD,letterSpacing:"-0.3px"}}>collegiate.</div>
+              <div style={{fontSize:10,color:T.textL,fontFamily:FB}}>Área do Hóspede</div>
+            </div>
+          </div>
+          <div style={{fontSize:22,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:4,letterSpacing:"-0.3px"}}>Bem-vindo de volta</div>
+          <div style={{fontSize:13,color:T.textL,fontFamily:FB,marginBottom:26,lineHeight:1.5}}>Entre com seus dados para acessar a área do hóspede.</div>
+          <div style={{fontSize:10.5,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:6}}>CPF ou e-mail</div>
+          <div style={{backgroundColor:"#fff",borderRadius:13,padding:"12px 15px",marginBottom:11,border:`1.5px solid ${T.tborder}`,fontSize:13,color:T.textL,fontFamily:FB}}>000.000.000-00</div>
+          <div style={{fontSize:10.5,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:6}}>Senha</div>
+          <div style={{backgroundColor:"#fff",borderRadius:13,padding:"12px 15px",marginBottom:22,border:`1.5px solid ${T.tborder}`,fontSize:13,color:T.textL,fontFamily:FB}}>••••••••</div>
+          <div style={{background:`${T.orange}55`,borderRadius:15,padding:"14px",textAlign:"center",fontSize:14,fontWeight:700,color:"#fff",fontFamily:FB,cursor:"default"}}>Entrar</div>
+          <div style={{marginTop:14,padding:"12px 14px",backgroundColor:"#FEF3C7",borderRadius:12,border:"1px solid #FCD34D",textAlign:"center"}}>
+            <div style={{fontSize:11,fontWeight:700,color:"#92400E",fontFamily:FB,marginBottom:3}}>⚠️ Protótipo · Fase 3</div>
+            <div style={{fontSize:10.5,color:"#78350F",fontFamily:FB,lineHeight:1.5}}>Esta é a área deslogada (F3 · App de Leads). O login e a área do hóspede são exclusivos da <strong>Fase 2</strong>.</div>
+          </div>
+          <div onClick={()=>setScreen("vitrine")} style={{marginTop:12,padding:"10px 14px",backgroundColor:`${T.orange}11`,borderRadius:12,border:`1px solid ${T.orange}33`,textAlign:"center",cursor:"pointer"}}>
+            <div style={{fontSize:12,fontWeight:600,color:T.orange,fontFamily:FB}}>← Voltar para a vitrine pública</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  let currentScreen;
+  if(appPhase==="splash"){
+    currentScreen=<SplashScreen/>;
+  } else {
+    const s={vitrine:<VitrineScreen/>,assistente:<AssistenteScreen/>,explorar:<VitrineScreen/>,entrar:<EntrarScreen/>};
+    currentScreen=s[screen]||<VitrineScreen/>;
+  }
+
+  const showNav=appPhase!=="splash";
+
+  return(
+    <div style={{flex:1,overflowY:"auto",background:"linear-gradient(160deg,#1A1A1A,#2A1A0A)",padding:"24px 20px 36px",display:"flex",flexDirection:"column",alignItems:"center",gap:16}}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap'); ::-webkit-scrollbar{display:none}`}</style>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{padding:"4px 12px",borderRadius:20,backgroundColor:"rgba(232,93,38,0.2)",border:"1px solid rgba(232,93,38,0.4)",fontSize:10,fontWeight:700,color:T.orange,letterSpacing:"0.1em",textTransform:"uppercase",fontFamily:FB}}>Fase 3</div>
+        <div style={{fontSize:11,fontWeight:600,color:"rgba(255,255,255,0.35)",fontFamily:FB}}>App de Leads · Área Deslogada</div>
+      </div>
+      <div style={{maxWidth:340,backgroundColor:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"10px 14px",textAlign:"center"}}>
+        <div style={{fontSize:10.5,color:"rgba(255,255,255,0.5)",fontFamily:FB,lineHeight:1.6}}>🌐 Fluxo: Splash → Vitrine pública → Busca → Assistente → Detalhe do imóvel</div>
+      </div>
+      <div style={{width:340,background:"#111",borderRadius:50,padding:"13px 7px 17px",boxShadow:`0 50px 110px rgba(0,0,0,0.65),0 0 0 1px rgba(255,255,255,0.06),0 0 70px ${T.orange}22`}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:5}}>
+          <div style={{width:100,height:28,backgroundColor:"#0A0A0A",borderRadius:16}}/>
+        </div>
+        <div style={{borderRadius:38,overflow:"hidden",height:640,backgroundColor:T.cream,display:"flex",flexDirection:"column"}}>
+          {currentScreen}
+          {showNav&&<NavBar/>}
+        </div>
+        <div style={{display:"flex",justifyContent:"center",marginTop:10}}>
+          <div style={{width:90,height:4,backgroundColor:"rgba(255,255,255,0.2)",borderRadius:2}}/>
+        </div>
+      </div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:7,justifyContent:"center",maxWidth:440}}>
+        {[
+          {l:"🌟 Splash",    fn:()=>{setAppPhase("splash");}},
+          {l:"🏠 Vitrine",   fn:()=>{setAppPhase("app");setScreen("vitrine");}},
+          {l:"✦ Assistente", fn:()=>{setAppPhase("app");setScreen("assistente");setAstStep(-1);}},
+          {l:"◎ Explorar",   fn:()=>{setAppPhase("app");setScreen("explorar");}},
+          {l:"○ Entrar",     fn:()=>{setAppPhase("app");setScreen("entrar");}},
+        ].map(t=>(
+          <div key={t.l} onClick={t.fn} style={{backgroundColor:"rgba(255,255,255,0.07)",borderRadius:20,padding:"6px 14px",fontSize:11,fontWeight:600,cursor:"pointer",color:"rgba(255,255,255,0.55)",fontFamily:FB,border:"1px solid rgba(255,255,255,0.09)",transition:"all 0.15s"}}>{t.l}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PAGE: APP DO INQUILINO · FASE 2 — ÁREA LOGADA
+// ═══════════════════════════════════════════════════════════════════════════════
 function PagePrototypeCollegiate({ startLoggedIn = false }) {
   const [appPhase, setAppPhase]   = useState(startLoggedIn ? "app" : "splash");
   const [screen, setScreen]       = useState(startLoggedIn ? "home" : "vitrine");
@@ -1852,7 +2232,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
   // ── Bottom Nav ──
   function NavBar(){
     const tabs=loggedIn
-      ? [{k:"home",icon:"⌂",label:"Início"},{k:"servicos",icon:"⬡",label:"Serviços"},{k:"unidade",icon:"🏠",label:"Unidade"},{k:"chat_col",icon:"✉",label:"Chat"},{k:"perfil",icon:"○",label:"Perfil"}]
+      ? [{k:"home",icon:"⌂",label:"Início"},{k:"servicos",icon:"⬡",label:"Serviços"},{k:"unidade",icon:"🏠",label:"Unidade"},{k:"financeiro_col",icon:"💳",label:"Financeiro"},{k:"perfil",icon:"○",label:"Perfil"}]
       : [{k:"vitrine",icon:"⌂",label:"Início"},{k:"assistente",icon:"✦",label:"Buscar lar"},{k:"explorar",icon:"◎",label:"Explorar"},{k:"entrar",icon:"○",label:"Entrar"}];
     return(
       <div style={{flexShrink:0,padding:"8px 10px 14px",background:T.dark,display:"flex",gap:4}}>
@@ -1893,7 +2273,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
             Explorar empreendimentos →
           </div>
           <div style={{textAlign:"center",fontSize:11.5,color:"rgba(255,255,255,0.3)",fontFamily:FB}}>
-            Já é morador? <span style={{color:T.orangeM,fontWeight:600,cursor:"pointer"}} onClick={()=>{setAppPhase("app");handleLogin();}}>Entrar no app</span>
+            Já tem reserva? <span style={{color:T.orangeM,fontWeight:600,cursor:"pointer"}} onClick={()=>{setAppPhase("app");handleLogin();}}>Entrar na conta</span>
           </div>
         </div>
       </div>
@@ -2103,7 +2483,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
             <div style={{fontSize:24,fontWeight:800,color:T.text,fontFamily:FD,lineHeight:1.2,marginBottom:12,letterSpacing:"-0.5px"}}>Como posso ajudar você hoje?</div>
             <div style={{fontSize:13,color:T.textM,lineHeight:1.75,fontFamily:FB,marginBottom:26}}>Responda 5 perguntas rápidas e eu vou encontrar a acomodação Collegiate perfeita para o seu perfil, orçamento e estilo de vida.</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:7,marginBottom:24}}>
-              {["Sou universitário","Busco coworking","Até R$ 2.000/mês","Sul de Minas"].map(s=>(
+              {["Executivo/Negócios","Nômade digital","Até R$ 2.000/mês","Sul de Minas"].map(s=>(
                 <div key={s} style={{backgroundColor:"#fff",borderRadius:20,padding:"6px 13px",fontSize:11.5,fontWeight:600,color:T.textM,cursor:"pointer",border:`1.5px solid ${T.tborder}`,fontFamily:FB}}>{s}</div>
               ))}
             </div>
@@ -2202,7 +2582,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
             {[
               {icon:"🗓",label:"Reservas",     sub:"Suas reservas ativas",  action:"reservas"},
               {icon:"🏠",label:"Meu Quarto",   sub:"Check-in e detalhes",   action:"meu_quarto"},
-              {icon:"💬",label:"Chat",         sub:"Falar com a gestão",    action:"chat_col"},
+              {icon:"💳",label:"Financeiro",sub:"Pagamentos e histórico",   action:"financeiro_col"},
               {icon:"🧹",label:"Serviços",     sub:"Limpeza e manutenção",  action:"servicos"},
             ].map(s=>(
               <div key={s.label} onClick={()=>setScreen(s.action)} style={{backgroundColor:"#fff",borderRadius:16,padding:"13px 13px",cursor:"pointer",boxShadow:"0 2px 10px rgba(26,14,6,0.06)",border:`1px solid ${T.tborder}`}}>
@@ -2220,13 +2600,12 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
 
   // ── SERVIÇOS ──
   function ServicosScreen(){
-    const [sub,setSub]=useState("servicos");
     const serviceCards=[
       {icon:"🧹",name:"Limpeza",desc:"Serviço de limpeza semanal do apartamento. Solicite via app com até 24h de antecedência.",info:"Seg a Sáb · 08h–18h"},
       {icon:"👕",name:"Lavanderia",desc:"Máquinas de lavar e secar de uso compartilhado disponíveis no 3º andar, Bloco B.",info:"24 horas · Andar 3, Bloco B"},
       {icon:"🔧",name:"Manutenção",desc:"Abra um chamado para reparos elétricos, hidráulicos ou estruturais na sua unidade.",info:"Atendimento em até 24h"},
       {icon:"🛒",name:"Mini Mercado",desc:"Itens de conveniência disponíveis na loja do térreo. Aceita Pix e cartão.",info:"Seg a Dom · 07h–23h · Térreo"},
-      {icon:"🏋️",name:"Academia",desc:"Equipamentos profissionais disponíveis para todos os moradores. Acesso com crachá.",info:"24 horas · Andar 2"},
+      {icon:"🏋️",name:"Academia",desc:"Equipamentos profissionais disponíveis para todos os hóspedes. Acesso com crachá.",info:"24 horas · Andar 2"},
       {icon:"📦",name:"Encomendas",desc:"Recebimento e guarda de encomendas na portaria. Notificação automática via app.",info:"Seg a Dom · 08h–22h"},
     ];
     return(
@@ -2235,55 +2614,59 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
         <div style={{padding:"0 18px 13px"}}>
           <div style={{fontSize:19,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:3}}>Serviços</div>
           <div style={{fontSize:12,color:T.textL,fontFamily:FB,marginBottom:12}}>Tudo que você precisa no seu dia a dia</div>
-          <div style={{display:"flex",gap:7}}>
-            {[{k:"servicos",l:"⬡ Serviços"},{k:"financeiro",l:"💳 Financeiro"}].map(t=>(
-              <CTag key={t.k} active={sub===t.k} onClick={()=>setSub(t.k)}>{t.l}</CTag>
+        </div>
+        <div style={{padding:"0 18px 24px"}}>
+          {serviceCards.map(s=>(
+            <div key={s.name} style={{backgroundColor:"#fff",borderRadius:18,padding:"14px 15px",marginBottom:9,display:"flex",gap:13,alignItems:"flex-start",boxShadow:"0 2px 11px rgba(26,14,6,0.06)",border:`1px solid ${T.tborder}`}}>
+              <div style={{width:44,height:44,borderRadius:13,backgroundColor:T.orangeL,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13.5,fontWeight:700,color:T.text,fontFamily:FB,marginBottom:3}}>{s.name}</div>
+                <div style={{fontSize:11.5,color:T.textM,fontFamily:FB,lineHeight:1.55,marginBottom:7}}>{s.desc}</div>
+                <div style={{display:"inline-flex",alignItems:"center",gap:4,backgroundColor:T.sand,borderRadius:7,padding:"4px 9px"}}>
+                  <span style={{fontSize:10}}>🕐</span>
+                  <span style={{fontSize:10.5,fontWeight:600,color:T.textM,fontFamily:FB}}>{s.info}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── FINANCEIRO ──
+  function FinanceiroColScreen(){
+    return(
+      <div style={{flex:1,overflowY:"auto",backgroundColor:T.cream}}>
+        <SBar/>
+        <div style={{padding:"0 18px 13px"}}>
+          <div style={{fontSize:19,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:3}}>Financeiro</div>
+          <div style={{fontSize:12,color:T.textL,fontFamily:FB,marginBottom:12}}>Pagamentos e histórico da sua unidade</div>
+        </div>
+        <div style={{padding:"0 18px 24px"}}>
+          <div style={{backgroundColor:"#fff",borderRadius:20,padding:"19px",boxShadow:"0 4px 18px rgba(26,14,6,0.07)",marginBottom:11,border:`1px solid ${T.tborder}`}}>
+            <div style={{fontSize:10.5,color:T.orange,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>Financeiro · Minha Unidade</div>
+            <div style={{fontSize:12,color:T.textL,fontFamily:FB,marginBottom:13}}>Taxa de Condomínio / Aluguel</div>
+            <div style={{display:"flex",alignItems:"center",gap:5,marginBottom:4}}>
+              <div style={{width:7,height:7,borderRadius:"50%",backgroundColor:T.orange}}/><div style={{fontSize:11,color:T.orange,fontWeight:600,fontFamily:FB}}>Vence em 05 de Novembro</div>
+            </div>
+            <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginBottom:3}}>TOTAL A PAGAR</div>
+            <div style={{fontSize:28,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:16,letterSpacing:"-0.5px"}}>R$ 3.250,00</div>
+            <div style={{display:"flex",gap:9}}>
+              <div style={{flex:1,backgroundColor:T.orange,borderRadius:11,padding:"11px",textAlign:"center",fontSize:12,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 6px 18px ${T.orange}44`}}>📋 Copiar Pix</div>
+              <div style={{flex:1,backgroundColor:T.sand,borderRadius:11,padding:"11px",textAlign:"center",fontSize:12,fontWeight:600,color:T.textM,cursor:"pointer",fontFamily:FB,border:`1px solid ${T.sandM}`}}>📄 Boleto PDF</div>
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+            {[{l:"Último Pagamento",v:"✓ Confirmado",sub:"05 Out",vc:T.tgreen},{l:"Fundo de Reserva",v:"R$ 12.400",sub:"Acumulado",vc:T.text}].map(c=>(
+              <div key={c.l} style={{backgroundColor:"#fff",borderRadius:16,padding:"13px",boxShadow:"0 2px 9px rgba(26,14,6,0.05)",border:`1px solid ${T.tborder}`}}>
+                <div style={{fontSize:9.5,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>{c.l}</div>
+                <div style={{fontSize:13.5,fontWeight:800,color:c.vc,fontFamily:FB}}>{c.v}</div>
+                <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginTop:2}}>{c.sub}</div>
+              </div>
             ))}
           </div>
         </div>
-        {sub==="servicos"&&(
-          <div style={{padding:"0 18px 24px"}}>
-            {serviceCards.map(s=>(
-              <div key={s.name} style={{backgroundColor:"#fff",borderRadius:18,padding:"14px 15px",marginBottom:9,display:"flex",gap:13,alignItems:"flex-start",boxShadow:"0 2px 11px rgba(26,14,6,0.06)",border:`1px solid ${T.tborder}`}}>
-                <div style={{width:44,height:44,borderRadius:13,backgroundColor:T.orangeL,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:13.5,fontWeight:700,color:T.text,fontFamily:FB,marginBottom:3}}>{s.name}</div>
-                  <div style={{fontSize:11.5,color:T.textM,fontFamily:FB,lineHeight:1.55,marginBottom:7}}>{s.desc}</div>
-                  <div style={{display:"inline-flex",alignItems:"center",gap:4,backgroundColor:T.sand,borderRadius:7,padding:"4px 9px"}}>
-                    <span style={{fontSize:10}}>🕐</span>
-                    <span style={{fontSize:10.5,fontWeight:600,color:T.textM,fontFamily:FB}}>{s.info}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {sub==="financeiro"&&(
-          <div style={{padding:"0 18px 24px"}}>
-            <div style={{backgroundColor:"#fff",borderRadius:20,padding:"19px",boxShadow:"0 4px 18px rgba(26,14,6,0.07)",marginBottom:11,border:`1px solid ${T.tborder}`}}>
-              <div style={{fontSize:10.5,color:T.orange,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>Financeiro · Minha Unidade</div>
-              <div style={{fontSize:12,color:T.textL,fontFamily:FB,marginBottom:13}}>Taxa de Condomínio / Aluguel</div>
-              <div style={{display:"flex",alignItems:"center",gap:5,marginBottom:4}}>
-                <div style={{width:7,height:7,borderRadius:"50%",backgroundColor:T.orange}}/><div style={{fontSize:11,color:T.orange,fontWeight:600,fontFamily:FB}}>Vence em 05 de Novembro</div>
-              </div>
-              <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginBottom:3}}>TOTAL A PAGAR</div>
-              <div style={{fontSize:28,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:16,letterSpacing:"-0.5px"}}>R$ 3.250,00</div>
-              <div style={{display:"flex",gap:9}}>
-                <div style={{flex:1,backgroundColor:T.orange,borderRadius:11,padding:"11px",textAlign:"center",fontSize:12,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 6px 18px ${T.orange}44`}}>📋 Copiar Pix</div>
-                <div style={{flex:1,backgroundColor:T.sand,borderRadius:11,padding:"11px",textAlign:"center",fontSize:12,fontWeight:600,color:T.textM,cursor:"pointer",fontFamily:FB,border:`1px solid ${T.sandM}`}}>📄 Boleto PDF</div>
-              </div>
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
-              {[{l:"Último Pagamento",v:"✓ Confirmado",sub:"05 Out",vc:T.tgreen},{l:"Fundo de Reserva",v:"R$ 12.400",sub:"Acumulado",vc:T.text}].map(c=>(
-                <div key={c.l} style={{backgroundColor:"#fff",borderRadius:16,padding:"13px",boxShadow:"0 2px 9px rgba(26,14,6,0.05)",border:`1px solid ${T.tborder}`}}>
-                  <div style={{fontSize:9.5,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:5}}>{c.l}</div>
-                  <div style={{fontSize:13.5,fontWeight:800,color:c.vc,fontFamily:FB}}>{c.v}</div>
-                  <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginTop:2}}>{c.sub}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     );
   }
@@ -2537,11 +2920,11 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
               <div style={{width:38,height:38,borderRadius:12,background:T.orange,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800,color:"#fff",fontFamily:FB}}>C</div>
               <div>
                 <div style={{fontSize:16,fontWeight:800,color:T.text,fontFamily:FD,letterSpacing:"-0.3px"}}>collegiate.</div>
-                <div style={{fontSize:10,color:T.textL,fontFamily:FB}}>Área do Morador</div>
+                <div style={{fontSize:10,color:T.textL,fontFamily:FB}}>Área do Hóspede</div>
               </div>
             </div>
             <div style={{fontSize:22,fontWeight:800,color:T.text,fontFamily:FD,marginBottom:4,letterSpacing:"-0.3px"}}>Bem-vindo de volta</div>
-            <div style={{fontSize:13,color:T.textL,fontFamily:FB,marginBottom:26,lineHeight:1.5}}>Entre com seus dados para acessar a área do inquilino.</div>
+            <div style={{fontSize:13,color:T.textL,fontFamily:FB,marginBottom:26,lineHeight:1.5}}>Entre com seus dados para acessar a área do hóspede.</div>
             <div style={{fontSize:10,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:6}}>CPF ou e-mail</div>
             <div style={{backgroundColor:"#fff",borderRadius:13,padding:"12px 15px",marginBottom:11,border:`1.5px solid ${T.tborder}`,fontSize:13,color:T.textL,fontFamily:FB}}>000.000.000-00</div>
             <div style={{fontSize:10,color:T.textL,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:FB,marginBottom:6}}>Senha</div>
@@ -2551,14 +2934,14 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
             </div>
             <div onClick={handleLogin} style={{background:T.orange,borderRadius:15,padding:"14px",textAlign:"center",fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:FB,boxShadow:`0 10px 32px ${T.orange}55`}}>Entrar na minha conta</div>
             <div style={{marginTop:14,padding:"12px 14px",backgroundColor:T.sand,borderRadius:12,textAlign:"center"}}>
-              <div style={{fontSize:11,color:T.textM,fontFamily:FB}}>Área exclusiva para <strong>inquilinos Collegiate</strong></div>
-              <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginTop:2}}>Ainda não é morador? Conheça nossos empreendimentos →</div>
+              <div style={{fontSize:11,color:T.textM,fontFamily:FB}}>Área exclusiva para <strong>hóspedes Collegiate</strong></div>
+              <div style={{fontSize:10.5,color:T.textL,fontFamily:FB,marginTop:2}}>Ainda não tem reserva? Conheça nossos empreendimentos →</div>
             </div>
           </div>
         </div>
       );
     } else {
-      const s={home:<HomeLoggedScreen/>,servicos:<ServicosScreen/>,perfil:<PerfilScreen/>,unidade:<UnidadeScreen/>,reservas:<ReservasScreen/>,meu_quarto:<MeuQuartoScreen/>,chat_col:<ChatCollegiateScreen/>};
+      const s={home:<HomeLoggedScreen/>,servicos:<ServicosScreen/>,perfil:<PerfilScreen/>,unidade:<UnidadeScreen/>,reservas:<ReservasScreen/>,meu_quarto:<MeuQuartoScreen/>,financeiro_col:<FinanceiroColScreen/>};
       currentScreen=s[screen]||<HomeLoggedScreen/>;
     }
   } else {
@@ -2610,7 +2993,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
       <div style={{maxWidth:340,backgroundColor:"rgba(255,255,255,0.04)",border:`1px solid rgba(255,255,255,0.07)`,borderRadius:12,padding:"10px 14px",textAlign:"center"}}>
         <div style={{fontSize:10.5,color:"rgba(255,255,255,0.5)",fontFamily:FB,lineHeight:1.6}}>
           {startLoggedIn
-            ? "🔐 Fluxo: Login → Home do inquilino → Financeiro · Manual · Infos do prédio · Chamados"
+            ? "🔐 Fluxo: Login → Home do hóspede → Financeiro · Manual · Infos do prédio · Chamados"
             : "🌐 Fluxo: Splash → Vitrine pública → Busca → Assistente → Detalhe do imóvel"}
         </div>
       </div>
@@ -2636,7 +3019,7 @@ function PagePrototypeCollegiate({ startLoggedIn = false }) {
               {l:"🏠 Home",     fn:()=>{setLoggedIn(true);setScreen("home");}},
               {l:"💳 Serviços", fn:()=>{setLoggedIn(true);setScreen("servicos");}},
               {l:"📋 Unidade",  fn:()=>{setLoggedIn(true);setScreen("unidade");}},
-              {l:"💬 Chat",     fn:()=>{setLoggedIn(true);setScreen("chat_col");}},
+              {l:"💳 Financeiro", fn:()=>{setLoggedIn(true);setScreen("financeiro_col");}},
               {l:"👤 Perfil",   fn:()=>{setLoggedIn(true);setScreen("perfil");}},
             ]
           : [
@@ -2731,7 +3114,7 @@ const FEAT_CATALOG = {
       { id:"b06", name:"Integração bancária (Pix, Boleto)",          h:160 },
       { id:"b07", name:"Evolução de obra e patrimônio",              h:80  },
       { id:"b08", name:"Webhook WhatsApp / canal de leads",          h:40  },
-      { id:"b09", name:"Gestão financeira — inquilino",              h:120 },
+      { id:"b09", name:"Gestão financeira — hóspede",              h:120 },
       { id:"b10", name:"Manual do imóvel e informações do prédio",   h:60  },
       { id:"b11", name:"Sistema de booking (leads F3)",              h:200 },
       { id:"b12", name:"Busca e filtros (leads F3)",                 h:80  },
@@ -3068,7 +3451,6 @@ function PagePrototypeBackoffice() {
     { k:"obras",        icon:"📈", label:"Evolução de Obra" },
     { k:"financeiro",   icon:"💰", label:"Financeiro" },
     { k:"contratos",    icon:"📄", label:"Contratos" },
-    { k:"leads",        icon:"📣", label:"Leads & Lançamentos" },
     { k:"logs",         icon:"🔍", label:"Logs & Auditoria" },
   ];
 
@@ -3076,7 +3458,6 @@ function PagePrototypeBackoffice() {
     { label:"Investidores Ativos",  value:"142",        delta:"+8 este mês",   color:"#1A2445", bg:"#EEF0FC" },
     { label:"Empreendimentos",      value:"6",          delta:"3 em obra",     color:"#2D7D46", bg:"#E6F4EE" },
     { label:"Patrimônio Total",     value:"R$ 48,2M",   delta:"↑ 12,4% YTD",  color:"#7C3AED", bg:"#EDE9FE" },
-    { label:"Leads este mês",       value:"37",         delta:"12 qualificados",color:"#C44A18",bg:"#FEF0EB" },
   ];
 
   const investidores = [
@@ -3093,14 +3474,6 @@ function PagePrototypeBackoffice() {
     { nome:"Collegiate Pouso Alegre",   cidade:"Pouso Alegre · MG",     status:"Em Obra",     obra:42,  unidades:96,  vgv:"R$ 9,8M" },
     { nome:"Collegiate Varginha",       cidade:"Varginha · MG",         status:"Lançamento",  obra:8,   unidades:80,  vgv:"R$ 8,1M" },
     { nome:"Collegiate Uberaba 2",      cidade:"Uberaba · MG",          status:"Pré-venda",   obra:0,   unidades:128, vgv:"R$ 21,5M" },
-  ];
-
-  const leads = [
-    { nome:"Pedro Lima",     canal:"App → WhatsApp",  empreend:"Collegiate Uberaba 2",  data:"14 Out",  status:"Qualificado" },
-    { nome:"Fernanda Alves", canal:"App → WhatsApp",  empreend:"Collegiate Uberaba 2",  data:"13 Out",  status:"Em contato" },
-    { nome:"Bruno Rocha",    canal:"App → WhatsApp",  empreend:"Collegiate Pouso Alegre",data:"12 Out", status:"Qualificado" },
-    { nome:"Camila Neves",   canal:"App → WhatsApp",  empreend:"Collegiate Varginha",   data:"11 Out",  status:"Novo" },
-    { nome:"Rafael Dias",    canal:"App → WhatsApp",  empreend:"Collegiate Uberaba 2",  data:"10 Out",  status:"Novo" },
   ];
 
   const statusColor = { "Ativo":"#059669", "Inativo":"#9CA3AF", "Entregue":"#059669", "Em Obra":"#1A2445", "Lançamento":"#C9A84C", "Pré-venda":"#7C3AED", "Qualificado":"#059669", "Em contato":"#1A2445", "Novo":"#9CA3AF" };
@@ -3134,15 +3507,15 @@ function PagePrototypeBackoffice() {
             ))}
           </div>
           <div style={{ backgroundColor:C.white, borderRadius:12, padding:"18px 20px", border:`0.5px solid ${C.border}` }}>
-            <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:14 }}>Leads Recentes</div>
-            {leads.slice(0,4).map((l,i) => (
-              <div key={l.nome} style={{ display:"flex", alignItems:"center", gap:12, padding:"9px 0", borderBottom: i<3?`0.5px solid ${C.border}`:"none" }}>
-                <div style={{ width:32, height:32, borderRadius:9, backgroundColor:"#EEF0FC", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, color:C.navyL, flexShrink:0 }}>{l.nome[0]}</div>
+            <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:14 }}>Investidores Recentes</div>
+            {investidores.slice(0,4).map((inv,i) => (
+              <div key={inv.nome} style={{ display:"flex", alignItems:"center", gap:12, padding:"9px 0", borderBottom: i<3?`0.5px solid ${C.border}`:"none" }}>
+                <div style={{ width:32, height:32, borderRadius:9, backgroundColor:"#EEF0FC", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, color:C.navyL, flexShrink:0 }}>{inv.nome[0]}</div>
                 <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:12, fontWeight:600, color:C.gray800 }}>{l.nome}</div>
-                  <div style={{ fontSize:10, color:C.gray400 }}>{l.empreend} · {l.data}</div>
+                  <div style={{ fontSize:12, fontWeight:600, color:C.gray800 }}>{inv.nome}</div>
+                  <div style={{ fontSize:10, color:C.gray400 }}>{inv.empreend} empreend. · desde {inv.desde}</div>
                 </div>
-                <span style={{ fontSize:9.5, fontWeight:700, color:statusColor[l.status], backgroundColor:statusBg[l.status], padding:"3px 8px", borderRadius:6 }}>{l.status}</span>
+                <span style={{ fontSize:9.5, fontWeight:700, color:statusColor[inv.status], backgroundColor:statusBg[inv.status], padding:"3px 8px", borderRadius:6 }}>{inv.status}</span>
               </div>
             ))}
           </div>
@@ -3208,47 +3581,6 @@ function PagePrototypeBackoffice() {
         </div>
       </div>
     );
-    if (activeMenu === "leads") return (
-      <div style={{ padding:24 }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
-          <div>
-            <div style={{ fontSize:14, fontWeight:700, color:C.gray800 }}>Leads & Lançamentos</div>
-            <div style={{ fontSize:11, color:C.gray400, marginTop:2 }}>Interesses captados pelo botão 'Quero Investir' no App</div>
-          </div>
-          <div style={{ display:"flex", gap:8 }}>
-            <div style={{ fontSize:11, padding:"6px 14px", backgroundColor:"#FDF3DC", color:C.gold, fontWeight:700, borderRadius:8, border:`1px solid ${C.gold}33` }}>37 leads este mês</div>
-            <button style={{ padding:"8px 14px", backgroundColor:C.gold, color:C.navy, border:"none", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer" }}>Configurar canal →</button>
-          </div>
-        </div>
-        <div style={{ backgroundColor:C.white, borderRadius:12, border:`0.5px solid ${C.border}`, overflow:"hidden", marginBottom:16 }}>
-          <div style={{ display:"grid", gridTemplateColumns:"1.5fr 1.5fr 2fr 1fr 1.2fr", padding:"10px 18px", backgroundColor:C.gray50, borderBottom:`0.5px solid ${C.border}` }}>
-            {["Nome","Canal","Empreendimento","Data","Status"].map(h=>(
-              <div key={h} style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.07em" }}>{h}</div>
-            ))}
-          </div>
-          {leads.map((l,i) => (
-            <div key={l.nome} style={{ display:"grid", gridTemplateColumns:"1.5fr 1.5fr 2fr 1fr 1.2fr", padding:"12px 18px", borderBottom:i<leads.length-1?`0.5px solid ${C.border}`:"none", alignItems:"center" }}>
-              <div style={{ display:"flex", alignItems:"center", gap:9 }}>
-                <div style={{ width:28, height:28, borderRadius:8, backgroundColor:"#EEF0FC", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:C.navyL }}>{l.nome[0]}</div>
-                <span style={{ fontSize:12.5, fontWeight:600, color:C.gray800 }}>{l.nome}</span>
-              </div>
-              <div style={{ fontSize:11, color:C.gray500||C.gray600 }}>{l.canal}</div>
-              <div style={{ fontSize:12, color:C.gray600 }}>{l.empreend}</div>
-              <div style={{ fontSize:11, color:C.gray400 }}>{l.data}</div>
-              <span style={{ fontSize:10, fontWeight:700, color:statusColor[l.status], backgroundColor:statusBg[l.status], padding:"3px 8px", borderRadius:6, display:"inline-block" }}>{l.status}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ backgroundColor:`${C.gold}11`, border:`1px solid ${C.gold}33`, borderRadius:12, padding:"14px 18px", display:"flex", alignItems:"center", gap:14 }}>
-          <div style={{ fontSize:22 }}>📣</div>
-          <div>
-            <div style={{ fontSize:12.5, fontWeight:700, color:C.gray800, marginBottom:3 }}>Canal de Redirecionamento Configurado</div>
-            <div style={{ fontSize:11, color:C.gray600 }}>Leads do botão 'Quero Investir' são direcionados ao WhatsApp da equipe comercial. Configure o número ou URL do canal externo no painel de configurações.</div>
-          </div>
-          <button style={{ marginLeft:"auto", padding:"8px 14px", backgroundColor:C.gold, color:C.navy, border:"none", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", flexShrink:0 }}>Configurar</button>
-        </div>
-      </div>
-    );
     // Default placeholder for other menus
     const menuItem = MENU.find(m=>m.k===activeMenu);
     return (
@@ -3293,67 +3625,6 @@ function PagePrototypeBackoffice() {
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// PAGE: LEADS APP PROTOTYPE (Phase 3 — placeholder)
-// ═══════════════════════════════════════════════════════════════════════════════
-function PagePrototypeLeads() {
-  const phases = [
-    { icon:"🔍", title:"Vitrine Pública", desc:"Área deslogada com listagem de todos os empreendimentos Collegiate disponíveis. Busca por cidade, tipo e faixa de preço, com filtros intuitivos." },
-    { icon:"🏡", title:"Detalhe do Empreendimento", desc:"Página rica com galeria de fotos, mapa de localização, amenidades, tabela de preços por tipo de unidade e avaliações de moradores." },
-    { icon:"🤖", title:"Assistente de Busca", desc:"Fluxo de 5 perguntas que identifica o perfil do lead e recomenda os melhores empreendimentos Collegiate para seu estilo de vida e orçamento." },
-    { icon:"📅", title:"Booking & Reserva", desc:"Seleção de unidade disponível, escolha de data de entrada e fluxo de reserva com pré-cadastro. Integração com CRM e notificação da equipe comercial." },
-    { icon:"👤", title:"Cadastro e Conversão", desc:"Formulário de cadastro de lead com dados básicos. Transição natural para conta de inquilino (F2) após aprovação e assinatura de contrato." },
-    { icon:"💬", title:"Falar com Consultor", desc:"CTA em múltiplos pontos do fluxo para entrar em contato com o time Collegiate via WhatsApp, chat ou agendamento de visita presencial." },
-  ];
-
-  return (
-    <div style={{ flex:1, overflowY:"auto", backgroundColor:C.offwhite, padding:28 }}>
-      <div style={{ maxWidth:820, margin:"0 auto" }}>
-        {/* Header banner */}
-        <div style={{ borderRadius:14, background:`linear-gradient(135deg,${C.collD} 0%,#8B2A08 100%)`, padding:"22px 28px", marginBottom:22, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <div>
-            <div style={{ fontSize:10, color:"rgba(255,255,255,0.5)", fontWeight:700, textTransform:"uppercase", letterSpacing:"0.09em", marginBottom:6 }}>Fase 3 · Próxima entrega</div>
-            <div style={{ fontSize:20, fontWeight:800, color:"#fff", marginBottom:5 }}>App de Leads · Área Deslogada</div>
-            <div style={{ fontSize:12, color:"rgba(255,255,255,0.6)", maxWidth:440, lineHeight:1.6 }}>Vitrine pública do Collegiate com busca, filtros, detalhe de empreendimentos e funcionalidade completa de booking. Captação e conversão de leads sem necessidade de login.</div>
-          </div>
-          <div style={{ width:60, height:60, borderRadius:16, backgroundColor:"rgba(255,255,255,0.1)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}>🔍</div>
-        </div>
-
-        {/* Timeline */}
-        <div style={{ ...card(), padding:"18px 22px", marginBottom:18 }}>
-          <div style={{ fontSize:10, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:14 }}>Previsto para Fase 3 · M11–M15</div>
-          <div style={{ display:"flex", gap:0, alignItems:"stretch" }}>
-            {["M11","M12","M13","M14","M15"].map((m,i) => (
-              <div key={m} style={{ flex:1, textAlign:"center", padding:"8px 4px", borderLeft:i>0?`0.5px solid ${C.border}`:"none" }}>
-                <div style={{ fontSize:11, fontWeight:700, color:C.collD }}>{m}</div>
-                <div style={{ fontSize:9, color:C.gray400, marginTop:2 }}>{["Vitrine","Busca","Assistente","Booking","Cadastro/CRM"][i]}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Funcionalidades */}
-        <div style={{ fontSize:11, fontWeight:700, color:C.gray400, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:12 }}>Funcionalidades Planejadas</div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
-          {phases.map(p => (
-            <div key={p.title} style={{ ...card({ borderLeft:`3px solid ${C.collD}` }), padding:"16px 18px" }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
-                <div style={{ width:36, height:36, borderRadius:10, backgroundColor:C.collL, display:"flex", alignItems:"center", justifyContent:"center", fontSize:17, flexShrink:0 }}>{p.icon}</div>
-                <div style={{ fontSize:13, fontWeight:700, color:C.gray800 }}>{p.title}</div>
-              </div>
-              <div style={{ fontSize:12, color:C.gray600, lineHeight:1.6 }}>{p.desc}</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ marginTop:18, backgroundColor:C.navy, borderRadius:12, padding:"16px 20px", display:"flex", alignItems:"center", gap:14 }}>
-          <div style={{ fontSize:22 }}>ℹ️</div>
-          <div style={{ fontSize:12, color:"rgba(255,255,255,0.65)", lineHeight:1.6 }}>O protótipo interativo desta fase será desenvolvido após a conclusão e aprovação da Fase 2. O App Collegiate atual (barra de navegação ao lado) contém uma prévia da vitrine pública que serviu de base para o escopo desta fase.</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ROOT
@@ -3370,14 +3641,19 @@ export default function MenfeCollegiateDoc() {
 
   const pages = {
     overview:          <PageOverview />,
-    architecture:      <PageArchitecture />,
-    roadmap:           <PageRoadmap />,
-    team:              <PageTeam />,
+    f1_arch:           <PageArchitecture phase="F1" />,
+    f1_roadmap:        <PageRoadmapPhase phase="F1" />,
+    f1_team:           <PageTeamPhase phase="F1" />,
     proto_menfe:       <PagePrototypeMenfe />,
     proto_backoffice:  <PagePrototypeBackoffice />,
+    f2_arch:           <PageArchitecture phase="F2" />,
+    f2_roadmap:        <PageRoadmapPhase phase="F2" />,
+    f2_team:           <PageTeamPhase phase="F2" />,
     proto_collegiate:  <PagePrototypeCollegiate startLoggedIn={true} />,
-    proto_leads:       <PagePrototypeCollegiate startLoggedIn={false} />,
-    pricing:           <PagePricing />,
+    f3_arch:           <PageArchitecture phase="F3" />,
+    f3_roadmap:        <PageRoadmapPhase phase="F3" />,
+    f3_team:           <PageTeamPhase phase="F3" />,
+    proto_leads:       <PagePrototypeLeadsApp />,
   };
 
   return (
