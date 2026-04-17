@@ -214,7 +214,7 @@ function PageOverview() {
         "Backoffice: gestão financeira, obras, empreendimentos e contratos",
         "Backoffice: gerenciamento de permissões (RBAC) e logs",
       ],
-      team: "3 devs full-time (160h/mês) + 1 designer part-time (80h/mês, M1–M2) + 1 GP (40h/mês)",
+      team: "1 dev Frontend full-time (160h/mês · Mobile & Web · React Native + NextJS) + 1 dev Backend full-time (160h/mês · NestJS) + 1 designer part-time (80h/mês, M1–M2) + 1 GP (40h/mês)",
       estrategia: "Entregar o core da plataforma com o menor escopo viável para validar o produto com investidores reais. O backoffice é desenvolvido em paralelo para que a equipe Menfe possa operar desde o dia 1 sem dependências externas.",
     },
     {
@@ -241,7 +241,7 @@ function PageOverview() {
         "Backoffice: gestão de hóspedes, quartos, serviços e reservas",
         "Backend: sistema de venda, booking e financeiro de hóspedes",
       ],
-      team: "3 devs full-time (160h/mês) + 1 designer part-time (80h/mês, 1,5 mês) + 1 GP (40h/mês)",
+      team: "1 dev Frontend full-time (160h/mês · Mobile & Web · React Native + NextJS) + 1 dev Backend full-time (160h/mês · NestJS) + 1 designer part-time (80h/mês, 1,5 mês) + 1 GP (40h/mês)",
       estrategia: "Com o MVP validado na F1, a F2 expande o ecossistema para o lado do hóspede. O sistema de booking e financeiro é a base técnica que sustenta a monetização recorrente do Collegiate — pavimentando a visão de plataforma de moradia flexível.",
     },
     {
@@ -265,7 +265,7 @@ function PageOverview() {
         "Backoffice: gestão de áreas comuns (M9)",
         "Backend: gestão de quartos e reservas de áreas (M9)",
       ],
-      team: "2 devs full-time (160h/mês · BE encerra M10) + 1 designer part-time (80h/mês, 2 meses) + 1 GP (40h/mês)",
+      team: "1 dev Frontend full-time (160h/mês · Mobile & Web · React Native + NextJS) + 1 dev Backend full-time (160h/mês · NestJS · encerra M10) + 1 designer part-time (80h/mês, 2 meses) + 1 GP (40h/mês)",
       estrategia: "A F3 fecha o ciclo da experiência do hóspede, tornando o app o centro de controle da estadia no Collegiate. O foco em reserva de áreas comuns, mapas e agendamento reduz a operação manual da gestão e posiciona o Collegiate como uma plataforma de moradia flexível e premium.",
     },
   ];
@@ -863,9 +863,8 @@ const TEAM_DATA = {
   F1: {
     phaseLabel:"Fase 1", months:[1,2,3,4], color:"#1A2445",
     roles:[
-      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[1,4], skills:["NestJS","PostgreSQL","JWT","Docker","CI/CD"], resp:["Auth e RBAC","Financeiro investidor","Contratos e patrimônio","Logs, auditoria e DevOps"] },
-      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[1,4], skills:["React Native","TypeScript","iOS","Android","FCM"], resp:["App Menfe F1 completo","Auth, portfólio, obras, financeiro","Notificações push e log de atividades"] },
-      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[1,4], skills:["NextJS","React","TypeScript","CSS Modules"], resp:["Backoffice Admin completo","RBAC, gestão de obras e contratos","Painel financeiro e investidores"] },
+      { abbr:"BE", role:"Backend Pleno",              type:"Full-time · 160h/mês", color:"#2D7D46", ms:[1,4], skills:["NestJS","PostgreSQL","JWT","Docker","CI/CD"], resp:["Auth e RBAC","Financeiro investidor","Contratos e patrimônio","Logs, auditoria e DevOps"] },
+      { abbr:"MB", role:"Mobile & Web · React Native + NextJS", type:"Full-time · 160h/mês", color:"#1A2445", ms:[1,4], skills:["React Native","NextJS","TypeScript","iOS","Android","FCM"], resp:["App Menfe F1 completo","Auth, portfólio, obras, financeiro","Notificações push e log de atividades","Backoffice Admin completo (NextJS)","RBAC, gestão de obras, contratos e financeiro"] },
       { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês",  color:"#0E7490", ms:[1,2], skills:["Figma","Design System","Handoff","UX Research"], resp:["Design System Menfe","Protótipo App do Investidor","Handoff para dev"] },
       { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[1,4], skills:["Scrum","Jira","Roadmap","Stakeholders"], resp:["Coordenação do squad","Gestão de backlog e sprints","Relatórios de progresso"] },
     ],
@@ -873,9 +872,8 @@ const TEAM_DATA = {
   F2: {
     phaseLabel:"Fase 2", months:[5,6,7,8], color:"#C44A18",
     roles:[
-      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[5,8], skills:["NestJS","Booking","Gateway Pgto"], resp:["Sistema de venda e booking","Carrinho investidor e hóspedes","Financeiro hóspedes"] },
-      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[5,8], skills:["React Native","TypeScript","iOS","Android"], resp:["App Collegiate: auth, quartos, reservas","App Menfe F2: mapas, investimentos, carrinho"] },
-      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[5,8], skills:["NextJS","React","TypeScript"], resp:["Backoffice: hóspedes, quartos, serviços","Gestão de reservas F2"] },
+      { abbr:"BE", role:"Backend Pleno",              type:"Full-time · 160h/mês", color:"#2D7D46", ms:[5,8], skills:["NestJS","Booking","Gateway Pgto"], resp:["Sistema de venda e booking","Carrinho investidor e hóspedes","Financeiro hóspedes"] },
+      { abbr:"MB", role:"Mobile & Web · React Native + NextJS", type:"Full-time · 160h/mês", color:"#1A2445", ms:[5,8], skills:["React Native","NextJS","TypeScript","iOS","Android"], resp:["App Collegiate: auth, quartos, reservas","App Menfe F2: mapas, investimentos, carrinho","Backoffice F2: hóspedes, quartos, serviços e reservas"] },
       { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês · 1,5 mês",  color:"#0E7490", ms:[5,6], skills:["Figma","Design System","Handoff"], resp:["Design System Collegiate","Protótipo App Collegiate","Protótipo App Menfe F2","Handoff F2"] },
       { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[5,8], skills:["Scrum","Jira","Roadmap"], resp:["Coordenação F2","Backlog e sprints","Alinhamento stakeholders"] },
     ],
@@ -883,9 +881,8 @@ const TEAM_DATA = {
   F3: {
     phaseLabel:"Fase 3", months:[9,10,11,12], color:"#2D7D46",
     roles:[
-      { abbr:"BE", role:"Backend Pleno",         type:"Full-time · 160h/mês", color:"#2D7D46", ms:[9,10], skills:["NestJS","PostgreSQL","Acessos"], resp:["Gestão de quartos e reservas","Áreas comuns e serviços","Chaves e acessos"] },
-      { abbr:"MB", role:"Mobile · React Native",  type:"Full-time · 160h/mês", color:"#1A2445", ms:[9,12], skills:["React Native","TypeScript","iOS","Android"], resp:["App Collegiate F3: chat, quartos","Reservas áreas comuns, mapas","Chave de acesso e agendamento"] },
-      { abbr:"FE", role:"Frontend · NextJS",       type:"Full-time · 160h/mês", color:"#7C3AED", ms:[9,9],  skills:["NextJS","React"], resp:["Backoffice: gestão de áreas comuns"] },
+      { abbr:"BE", role:"Backend Pleno",              type:"Full-time · 160h/mês", color:"#2D7D46", ms:[9,10], skills:["NestJS","PostgreSQL"], resp:["Gestão de quartos e reservas","Áreas comuns e serviços"] },
+      { abbr:"MB", role:"Mobile & Web · React Native + NextJS", type:"Full-time · 160h/mês", color:"#1A2445", ms:[9,12], skills:["React Native","NextJS","TypeScript","iOS","Android"], resp:["App Collegiate F3: chat, quartos","Reservas áreas comuns, mapas, agendamento","Backoffice F3: gestão de áreas comuns"] },
       { abbr:"UX", role:"Product Designer",        type:"Part-time · 80h/mês · 2 meses",  color:"#0E7490", ms:[9,10], skills:["Figma","Handoff","UX Research"], resp:["Protótipo App Leads F3","Handoff F3 completo","Ajustes e validações finais"] },
       { abbr:"GP", role:"Gestor de Projetos",      type:"Part-time · 40h/mês",  color:"#BE185D", ms:[9,12], skills:["Scrum","Jira","Go-live"], resp:["Coordenação F3 e go-live","Gestão de riscos finais","Entrega e encerramento"] },
     ],
